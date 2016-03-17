@@ -1,0 +1,293 @@
+%    These are the general settings for my Notes Template
+%    > I haven't organized them terribly much yet, however plan to soon.
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{incgraph}
+\usepackage{geometry}
+\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
+\usepackage{wrapfig}
+\usepackage{url}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{makeidx}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{ulem}
+\usepackage[english]{babel}
+\usepackage{fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{url}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{
+  shapes.multipart,
+  calc,
+  matrix,
+  backgrounds
+  }
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{bbold}
+\usepackage{thmtools}
+\usepackage{xlop}
+\usepackage{%
+nameref,%\nameref
+hyperref,%\autoref
+% n.b. \Autoref is defined by thmtools
+cleveref,% \cref
+% n.b. cleveref after! hyperref
+}
+ \geometry{verbose,tmargin=1.0in,bmargin=0.5in,lmargin=0.5in,rmargin=0.5in,footskip=0.2in}
+% \geometry{paperheight=16383pt, left=40pt, top=40pt, textwidth=530pt, marginparsep=20pt, marginparwidth=100pt, textheight=16263pt, footskip=40pt}
+
+% \pagestyle{fancy}
+\PassOptionsToPackage{normalem}{ulem}
+% \makeindex
+% \makeatletter
+
+% \setlength{\headheight}{15pt}
+
+\tikzstyle{vertarray}=[
+   draw,
+   rectangle split,
+   rectangle split parts=#1,
+   rectangle split part align=center
+]
+
+% Command for use \textsc quickly
+\newcommand{\noun}[1]{\textsc{#1}}
+\newcommand{\ar}{\rightarrow}
+\newcommand{\lar}{\longrightarrow}
+
+% Numbering
+% \numberwithin{equation}{section}
+% \numberwithin{figure}{section}
+
+\usepackage{caption}
+\captionsetup{labelfont=bf,indention=0cm}
+\usepackage{hyperref}
+\hypersetup{%
+colorlinks,
+citecolor=blue,
+filecolor=blue,
+linkcolor=blue,
+urlcolor=black
+}
+
+\newcommand{\tc}[1]{\texttt{#1}}
+\renewcommand{\baselinestretch}{1}
+
+% Tweaks
+% \geometry{letterpaper}
+% \renewcommand{\ps@plain}{\pagestyle{fancy}}
+\addto\captionsenglish{\renewcommand{\contentsname}{Table of Contents}}
+
+\makeatother
+\usepackage[english]{babel}
+
+\newcommand{\tocandfigures}{
+\rule[0.5ex]{1\columnwidth}{1pt}
+Last Revision: \today
+\noindent \begin{flushleft}
+\makeatletter
+\makeatother
+\setcounter{page}{1}
+\setcounter{secnumdepth}{0} %Hide section number in header
+\end{flushleft}
+\noindent \begin{flushleft}
+\tableofcontents{}
+\par\end{flushleft}
+\noindent \begin{flushleft}
+\rule[0.5ex]{1\columnwidth}{1pt}
+\par\end{flushleft}
+\noindent \begin{flushleft}
+\newpage{}
+\par\end{flushleft}
+}
+\newcommand{\ub}[1]{\underbrace{#1}}
+\newcommand{\ubt}[2]{$\underbrace{\mbox{#1}}_{\mbox{#2}}$}
+\newcommand{\obt}[2]{$\overbrace{\mbox{#1}}^{\mbox{#2}}$}
+\newcommand{\comb}[2]{{#1 \choose #2}}
+\newcommand{\doabstract}[1]{
+\sectionmark{Abstract}
+\begin{abstract}
+\noindent
+#1
+\end{abstract}
+\setcounter{secnumdepth}{2}
+\setcounter{page}{2}
+\pagenumbering{arabic}
+}
+
+\newcommand{\piecewise}[4]{\left\{
+     \begin{array}{lr}
+       #1 & \mbox{#2} \\ #3 & \mbox{#4}
+     \end{array}
+   \right.}
+
+\newcommand{\expo}[1]{\exp \left\{ #1 \right\}}
+\newcommand{\trace}[1]{\mbox{Tr}\ensuremath{\left\{ #1 \right\}}}
+\newcommand{\tr}[1]{\trace{#1}}
+\newcommand{\bra}[1]{\ensuremath{\left\langle#1\right|}}
+\newcommand{\ket}[1]{\ensuremath{\left|#1\right\rangle}}
+\newcommand{\braket}[2]{\ensuremath{\left\langle#1 \vphantom{#2}\middle|  #2 \vphantom{#1}\right\rangle}}
+\newcommand{\ba}{\bra{\alpha}}
+\newcommand{\bb}{\bra{\beta}}
+\newcommand{\bg}{\bra{\gamma}}
+\newcommand{\bx}{\bra{x}}
+\newcommand{\ka}{\left| \alpha \rangle \right.}
+\newcommand{\kb}{\left| \beta \rangle \right.}
+\newcommand{\kg}{\left| \gamma \rangle \right.}
+\newcommand{\kpsi}{\ket{\Psi}}
+\newcommand{\bp}{\bra{+}}
+\newcommand{\bm}{\bra{-}}
+\newcommand{\kp}{\ket{+}}
+\newcommand{\km}{\ket{-}}
+\newcommand{\kx}{\ket{x}}
+\newcommand{\kplx}{\ket{+}_x}
+\newcommand{\kmix}{\ket{-}_x}
+\newcommand{\kply}{\ket{+}_y}
+\newcommand{\pr}[1]{\left|#1\right|^2}
+\newcommand{\kmiy}{\ket{-}_y}
+\newcommand{\E}[1]{\langle #1 \rangle}
+\newcommand{\mtx}[1]{\left(\begin{matrix}#1\end{matrix}\right)}
+\newcommand{\ebasis}{\ket{e_1}, \ket{e_2}, \ldots, \ket{e_n}}
+\newcommand{\angstrom}{\mbox{\normalfont\AA}}
+\newcommand{\sip}[2]{\langle #1 , #2 \rangle}
+\DeclareMathOperator{\level}{level}
+\newcommand{\f}[2]{\frac{#1}{#2}}
+\newcommand{\s}[2]{\sum_{#1}^{#2}}
+\newcommand{\Z}{{\mathbb{Z}}}
+\newcommand{\Q}{{\mathbb{Q}}}
+\newcommand{\R}{{\mathbb{R}}}
+\newcommand{\C}{{\mathbb{C}}}
+\newcommand{\N}{{\mathbb{N}}}
+\newcommand{\wC}{{\textit{C}}}
+\newcommand{\n}{\vskip 6pt \noindent}
+\newcommand{\e}{\epsilon}
+\newcommand{\notdv}{\thinspace \not | \thickspace}
+\newcommand{\union}{\cup}
+\newcommand{\inter}{\cap}
+\newcommand{\into}{\rightarrow}
+\newcommand{\nset}[1]{#1_1,\ldots,#1_n}
+\newcommand{\setk}[2]{#1_1,\ldots,#1_#2}
+\newcommand{\bnset}[1]{\{#1_1,\ldots,#1_n\}}
+\newcommand{\bset}[2]{\{#1_1,\ldots,#1_#2\}}
+\newcommand{\ton}[1]{#1=1,\ldots,n}
+\newcommand{\tok}[2]{#1=1,\ldots,#2}
+\newcommand{\disc}{\operatorname{disc}}
+\newcommand{\spn}{\operatorname{Span}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\proj}{\operatorname{proj}}
+\newcommand{\prp}{\operatorname{perp}}
+\newcommand{\ux}{\underline{x}}
+\newcommand{\ua}{\underline{a}}
+\newcommand{\uu}{\underline{u}}
+\newcommand{\pfx}{\frac{\partial f}{\partial x}}
+\newcommand{\pfy}{\frac{\partial f}{\partial y}}
+\newcommand{\px}{\frac{\partial}{\partial x}}
+\newcommand{\pxn}[1]{\frac{\partial f}{\partial x_{#1}}}
+\newcommand{\py}{\frac{\partial}{\partial y}}
+\newcommand{\jacu}{\frac{\partial(u,v)}{\partial(x,y)}}
+\newcommand{\jacx}{\frac{\partial(x,y)}{\partial(u,v)}}
+\newcommand{\vzero}{\vec{0}}
+\newcommand{\va}{\vec{a}}
+\newcommand{\vb}{\vec{b}}
+\newcommand{\vc}{\vec{c}}
+\newcommand{\vd}{\vec{d}}
+\newcommand{\ve}{\vec{e}}
+\newcommand{\vh}{\vec{h}}
+\newcommand{\vn}{\vec{n}}
+\newcommand{\vs}{\vec{s}}
+\newcommand{\vu}{\vec{u}}
+\newcommand{\vv}{{\vec{v}}}
+\newcommand{\vw}{\vec{w}}
+\newcommand{\vx}{\vec{x}}
+\newcommand{\vy}{\vec{y}}
+\newcommand{\vz}{\vec{z}}
+\newcommand{\di}{\partial}
+\theoremstyle{definition}
+\newtheorem{cor}{Corollary}[section]
+\newtheorem*{note}{Note}
+\newtheorem{notation}{Notation}[section]
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+ \newcommand{\Lp}{\mathcal{L}^p}
+\declaretheorem[name=Theorem,
+refname={theorem,theorems},
+Refname={Theorem,Theorems},
+numberwithin=section]{thrm}
+\DeclareMathOperator{\girth}{Girth}
+\declaretheorem[name=Lemma,
+refname={lemma,lemmas},
+Refname={Lemma,Lemmas},
+numberwithin=section]{lem}
+
+\declaretheorem[name=Example,
+refname={example,examples},
+Refname={Example,Example},
+numberwithin=section]{exmp}
+
+\declaretheorem[name=Remark,
+refname={remark,remarks},
+Refname={Remark,Remarks},
+numberwithin=section]{rem}
+
+\declaretheorem[name=Proposition,
+refname={proposition,propositions},
+Refname={Proposition,Propositions},
+numberwithin=section]{prop}
+
+\declaretheorem[name=Definition,
+refname={definition,definitions},
+Refname={Definition,Definitions},
+numberwithin=section]{defn}
+
+\usepackage{color}
+\usepackage{listings}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{ivory}{rgb}{1.000000,1.000000,0.941176}
+
+% \newcommand{\ptree}[1]{
+%   \begin{center}
+%     \begin{tikzpicture}
+%     #1
+%     \end{tikzpicture}
+%   \end{center}
+% }
+
+% \newcommand{\pnode}[1]{
+%     \node[circle,draw](z){$#1$}
+% }
+% \newcommand{\pchild}[1]{
+%       child{node[circle,draw]{$#1$}}
+% }
+
+\def\labelitemi{$\bullet$}
+
+\lstset{
+language=c++,
+basicstyle=\ttfamily\small,
+breaklines=true,
+prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+frame=none,
+backgroundcolor=\color{ivory}
+showtabs=false,
+showspaces=false,
+showstringspaces=false,
+morecomment=[l][\color{magenta}]{\#},
+keywordstyle=\color{blue}\bfseries,
+stringstyle=\color{green!50!black},
+commentstyle=\color{gray}\itshape,
+numbers=left,
+captionpos=t,
+backgroundcolor=\color{white},
+escapeinside={\%*}{*)},
+escapechar=@
+}
+\setlength\parindent{0pt}
