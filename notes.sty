@@ -21,13 +21,16 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
 \usepackage{url}
+\usepackage{tabu}
 \usepackage{enumerate}
 \usepackage{tikz}
 \usepackage{tikz-qtree}
-\usetikzlibrary{
-  shapes.multipart,
-  calc,
+\usetikzlibrary{%
+ decorations.pathreplacing,
+ calc,
+  shapes,
   matrix,
+  chains,
   backgrounds
   }
 \usepackage{booktabs}
@@ -42,7 +45,8 @@ hyperref,%\autoref
 cleveref,% \cref
 % n.b. cleveref after! hyperref
 }
- \geometry{verbose,tmargin=1.0in,bmargin=0.5in,lmargin=0.5in,rmargin=0.5in,footskip=0.2in}
+\geometry{letterpaper, margin=0.75in, textheight=740pt}
+% \geometry{verbose,tmargin=1.0in,bmargin=0.5in,lmargin=0.5in,rmargin=0.5in} %,footskip=0.2in}
 % \geometry{paperheight=16383pt, left=40pt, top=40pt, textwidth=530pt, marginparsep=20pt, marginparwidth=100pt, textheight=16263pt, footskip=40pt}
 
 % \pagestyle{fancy}
@@ -97,7 +101,7 @@ Last Revision: \today
 \makeatletter
 \makeatother
 \setcounter{page}{1}
-\setcounter{secnumdepth}{0} %Hide section number in header
+\setcounter{secnumdepth}{1} %Hide section number in header
 \end{flushleft}
 \noindent \begin{flushleft}
 \tableofcontents{}
