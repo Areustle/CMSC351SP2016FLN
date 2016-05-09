@@ -32,7 +32,7 @@
 \usepackage{notes}
 \usepackage{inconsolata}
 \usepackage[shellescape]{gmp}
-\geometry{paperheight=15000pt, left=40pt, top=40pt, textwidth=530pt, marginparsep=20pt, marginparwidth=100pt, textheight=16263pt, footskip=40pt}
+\allowdisplaybreaks%
 \newcommand{\thiscoursecode}{CMSC 351}
 \newcommand{\thiscoursename}{Algorithms}
 \newcommand{\thisprof}{Dr.\ Clyde Kruskal}
@@ -43,6 +43,8 @@
 \ifpdf%
 \DeclareGraphicsRule{*}{mps}{*}{}
 \fi
+% \listfiles
+% \VerbEnvir{align tikzpicture algorithm}
 %%%Headers
 \chead{351-Algorithms}
 \lhead{\thisterm}
@@ -91,7 +93,7 @@
   % Notes front
   \notefront%
   % Table of Contents and List of Figures
-  % \tocandfigures
+  \tocandfigures%
 
 
 \section{Maximum Subarray Problem}
@@ -232,7 +234,7 @@ Worst case Scenario.
 \begin{algorithm}
 \For{i = n downto 2}{%
     \For{j = 1 to i-1}{%
-        \If{$A[j] > A[j+i]$}{%
+        \If{$A[j] > A[j+1]$}{%
         swap (A[j],A[j+1])\;
         }
     }
@@ -244,7 +246,7 @@ Major Growth Elements of Bubble sort will be Comparisons and Exchanges.\\
 
 Best case number of comparisons require you to view every element unconditionally. \\
 \begin{align*}
-    \sum_{i=2}^n \sum_{j=1}^{i-1} &= \sum_{i=2}^{n} i-1 \\
+    \sum_{i=2}^n \sum_{j=1}^{i-1} 1 &= \sum_{i=2}^{n} i-1 \\
     &= \sum_{i=1}^{n-1} (i+1) -1 \\
     &= \sum_{i=1}^{n-1} i \\
     &= \f{(n-1)n}{2}
@@ -331,7 +333,7 @@ Value is number of moves. Which is (i-j+1).
  &= \frac{1}{2}\left[ \s{i=2}{n}i+1\right] \\
  &= \frac{1}{2}\left[ \s{i=2}{n}i+ \s{i=2}{n}1\right] \\
  &= \frac{1}{2}\left[ \s{i=1}{n}i -1 + (n-1) \right] \\
- &= \frac{1}{2}\left[ \f{(n)(n+2)}{2} -1 + \frac{2(n-1)}{2} \right] \\
+ &= \frac{1}{2}\left[ \f{(n)(n+1)}{2} -1 + \frac{2(n-1)}{2} \right] \\
  &= \frac{1}{2}\left[ \f{(n^2+n-2)}{2} + \frac{2n-2}{2} \right] \\
  &= \f{(n^2+3n-4)}{4}  \\
  &= \f{(n+4) (n-1)}{4}
@@ -341,22 +343,37 @@ Value is number of moves. Which is (i-j+1).
 \subsection{Analyzing Exchanges}
 
 \subsubsection{Best Case Exchanges}
-Best case number of moves = $2n-1$. There is 1 move in in the $-\infty$ assignment at the top, then in the for loop there are 2 moves per iteration, moving A[i] into t,
-and moving it back into the same spot. $1 + 2(n-1) = 2n -1$. \\
+
+Best case number of moves = $2n-1$. There is 1 move in in the $-\infty$
+assignment at the top, then in the for loop there are 2 moves per iteration,
+moving A[i] into t, and moving it back into the same spot. $1 + 2(n-1) = 2n
+-1$.
 
 \subsubsection{Worst Case Exchanges}
-Worst case number of moves is 2 for each iteration of outer loop plus worst case number of comparisons, minus the time when the comparison is false at the end, of the inner loop, plus 1 for the top assignment. $2(n-1) + COMP - (n-1) +1 $.
 
-Note the short cut, at each iteration we're doing one more move than comparison. So just easily take the value already derived for Worst case comparisons,
-and add the number of loop iterations, plus 1 for the sentinel assignment.
-$$\frac{(n+2)(n-1)}{2} +n $$
+Worst case number of moves is 2 for each iteration of outer loop plus worst
+case number of comparisons, minus the time when the comparison is false at the
+end, of the inner loop, plus 1 for the top assignment. $2(n-1) + COMP - (n-1)
++1 $.
+
+Note the short cut, at each iteration we're doing one more move than
+comparison. So just easily take the value already derived for Worst case
+comparisons, and add the number of loop iterations, plus 1 for the sentinel
+assignment.  $$\frac{(n+2)(n-1)}{2} +n $$
 
 \subsubsection{Average Case Exchanges}
-In the average case, whenever there's a comparison, there will always be a move, except the 1 time per iteration it evaluates false.
-So the analysis method is the same as for the worse case. Since we know the number.
-$$\f{(n+4) (n-1)}{4} + n$$
+
+In the average case, whenever there's a comparison, there will always be a
+move, except the 1 time per iteration it evaluates false.  So the analysis
+method is the same as for the worse case. Since we know the number.  $$\f{(n+4)
+(n-1)}{4} + n$$
+
 \begin{rem}
-An important trick is to recognize that the moves are related to the comparisons 1 to 1 and that there will be 1 time when the comparison evaluates false each iteration, so you subtract that from the final analysis.
+
+An important trick is to recognize that the moves are related to the
+comparisons 1 to 1 and that there will be 1 time when the comparison evaluates
+false each iteration, so you subtract that from the final analysis.
+
 \end{rem}
 
 
@@ -401,9 +418,9 @@ cost to check as array value comparisons.
 In the best case, the array is already sorted, so there will just be 1 comparison per iteration of the outer loop. $\s{i=2}{n} 1 = n-1$
 
 \subsection{Worst Case Comparisons}
-In the worst case the array is reverse sorted, and every ith iteration of the loop must compare against all previous elements.
+In the worst case the array is reverse sorted, and every ith iteration of the loop must compare against all previous $(i-1)$  elements.
 \begin{align*}
-    \s{i=2}{n}\s{j=1}{i}1 &= \s{i=2}{n} i-1 \\
+    \s{i=2}{n}\s{j=1}{i-1}1 &= \s{i=2}{n} i-1 \\
     &= \s{i=2}{n} i - \s{i=2}{n} 1 \\
     &= \f{n(n+1)}{2} -1 -(n-1) \\
     &= \f{n(n+1)}{2} -n \\
@@ -600,11 +617,11 @@ starting at index p and ending at index q. So for the full list, where p=1 and q
 
 Because this gives $\lg n$ terms, we can make it a little easier by dropping the bottom row, which sums to 0 anyway, because it's $0n$.
 \begin{align*}
-    \s{i=0}{\lg(n-1)} 2^i (\frac{n}{2^i}-1) &= \s{i=0}{\lg(n-1)} (n-2^i) \\
-    &= \s{i=0}{\lg(n-1)} n - \s{i=0}{\lg(n-1)} 2^i \\
-    &= (n\lg(n)) - (2^{\lg(n-1)+1} -1) & \text{geometric series} \\
-    &= (n\lg(n)) - (n-1) \\
-    &= n\lg(n) - n+1 \\
+    \s{i=0}{\lg n-1} 2^i (\frac{n}{2^i}-1) &= \s{i=0}{\lg n-1} (n-2^i) \\
+    &= \s{i=0}{\lg n-1} n - \s{i=0}{\lg n-1} 2^i \\
+    &= (n\lg n) - (2^{\lg n-1 +1} -1) & \text{geometric series} \\
+    &= (n\lg n ) - (n-1) \\
+    &= n\lg n  - n+1 \\
 \end{align*}
 
 \subsection{Merge Sort Recurrence}
@@ -682,9 +699,9 @@ Then, recurse through this method until we reach a base we really have memorized
     \draw(6,-0.3) -- (7.5,-0.3);
     \node at (6.9,-0.6) {bd};
     \node at (6.7,-0.9) {bc};
-    \node at (6.5,-1.2) {ad};
+    \node at (6.7,-1.2) {ad};
     \node at (7.7,-1.1) {\textbraceright $\alpha n$ time};
-    \node at (6.3,-1.5) {ac};
+    \node at (6.4,-1.5) {ac};
     \node at (5.8,-1.5) {+};
     \draw(6,-1.8) -- (7.5,-1.8);
 
@@ -720,7 +737,7 @@ So without writing out the algorithm: $M(n) = 4M\left( \frac{n}{2} \right)+2\alp
 Which is fun, I'm having fun.
 
 \begin{align*}
-    \text{comparisons} &= \s{i=0}{\lg(n)-1} (4^i (2\alpha\frac{n}{2^i}) ) + 4^{\lg(n)}\mu \\
+    \text{atomic actions} &= \s{i=0}{\lg(n)-1} (4^i (2\alpha\frac{n}{2^i}) ) + 4^{\lg(n)}\mu \\
     &=2\alpha n \s{i=0}{\lg n-1}\frac{4^i}{2^i} \cdots\\
     &=2\alpha n \s{i=0}{\lg n-1}{2^i} \cdots\\
     &=2\alpha n \left( 2^{\lg n -1 +1} -1 \right) & & \text{geometric series} \\
@@ -896,7 +913,7 @@ When we get
 \subsubsection{Implementation details}
 
 This gives us the incredible ability to use the constants of the recurrence
-into a $\Theta()$ and determine if it will be greater than another algorithm in
+into a running time and determine if it will be greater than another algorithm in
 constant time.  There's also the Schonhage Strassen algorithm, which is
 $\Theta(n\log n \log\log n)$.
 
@@ -923,7 +940,7 @@ Improved by Robert Floyd
 
 \defn[Heap]{A binary tree where every value is larger than its
 children. Equivalently its descendants. In this class we require that all
-binary trees are full binary trees, where each parent has 2 children.}
+binary trees are full binary trees.}
 
 \begin{tikzpicture}[centered]
 \tikzset{every tree node/.style={draw,circle}, level distance = 2cm, sibling distance = 1cm}
@@ -988,7 +1005,7 @@ But the heap shrinks, each iteration removes an element. So let's sum 0 to n-1
 &=2 \lg(n!) &\text{Stirling's Formula}\;\;\; n! \approx {\left( \frac{n}{e} \right)}^n \cdot \sqrt{2\pi n} \\
 &=2\lg\left[{\left( \frac{n}{e} \right)}^n \cdot \sqrt{2\pi n} \right] \\
 &\approx 2\left[ n \lg(\frac{n}{e})+\lg({(2\pi n)}^{\frac{1}{2}}) \right] \\
-&= 2\left[ n\left[ \lg n = \lg e \right]+ \frac{1}{2}\lg(2\pi n) \right] \\
+&= 2\left[ n\left[ \lg n - \lg e \right]+ \frac{1}{2}\lg(2\pi n) \right] \\
 &=2n\lg n -2n\lg e + \lg n + \lg(2\pi) \\
 &=2n\lg n + O(n)
 \end{align*}
@@ -1108,11 +1125,14 @@ up. This gives Heapsort $ n\lg n + n\lg\lg n= \Theta(n\lg n)$ performance.
 \section{Finding Bounds to summation functions}
 \subsection{Mathematical Preliminaries}
 \subsubsection{Geometric Series}
+For $\left|r\right| \le1$ recall:
+
 \begin{align*}
     \s{i=0}{\infty}r^{i} &= \frac{1}{1-r} & \text{Infinite Geometric Series}\\
     \s{i=0}{n-1}r^{i} &= \frac{1-r^{n}}{1-r} = \frac{r^n -1}{r-1} & \text{Finite Geometric Series}\\
 \end{align*}
 
+How do we solve this? Or at least get a reasonable estimate?
 \begin{align*}
     \s{i=0}{\infty}i\cdot r^{i} &= \s{i=1}{\infty}i\cdot r^{i} \\
     &= r\cdot\s{i=1}{\infty}i\cdot r^{i-1} \\
@@ -1135,7 +1155,7 @@ Now for the finite series.
     &= r\cdot\s{i=1}{n-1}{\left( \int ir^{i-1} \right)}^{\prime} & \text{sum of derivatives is the derivative of the sum}\\
     &= r\cdot\s{i=1}{n-1}{\left( r^i \right)}^{\prime} \\
     &= r{\left(\s{i=1}{n-1} r^i \right)}^{\prime} \\
-    &= r\left[{\left(\s{i=1}{n-1} r^i \right)}^{\prime}\right] \\
+    % &= r\left[{\left(\s{i=1}{n-1} r^i \right)}^{\prime}\right] \\
     &= r\left[{\left(\frac{r^n-1}{r-1}-1 \right)}^{\prime}\right] \\
     &= r\left[ \frac{nr^{n-1}(r-1)-(r^n-1)}{{(r-1)}^2} \right] \\
     &= r\left[ \frac{nr^n-nr^{n-1}-r^n+1}{{(r-1)}^2} \right] \\
@@ -1179,37 +1199,37 @@ Next we can try to split the sum in half and floor both to the lowest term in th
 
 \subsection{Using continuous math to solve discrete math}
 
-Assume a function that's bounded from m to n the sum of areas in discrete terms is bounded by the integral of some function.
+Assume a function that's bounded from m to n. The Riemann sum of areas in discrete terms is bounded by the integral of some function.
 $$\int_{m-1}^n f(x) dx \le \s{i=m}{n} f(i) \le \int_{m}^{n+1} f(x) dx$$ Provided $f(x)$ is increasing.
 
 $$\int_{m}^{n+1} f(x) dx \le \s{i=m}{n} f(i) \le \int_{m-1}^{n} f(x) dx$$ Provided $f(x)$ is decreasing.
 
 \subsubsection{Gauss's Sum}
-\begin{align*}
-    &\int_{m-1}^n x dx &\le \s{i=m}{n} i &\le \int_{m}^{n+1} x dx \\
-    &= \frac{x^2}{2} \Big|_0^n  &&= \frac{n^2}{2} \Big|_i^{n+1} \\
-    &= \frac{n^2}{2} -\frac{0^2}{2}  &&= \frac{{(n+1)}^2}{2} -\frac{1^2}{2} \\
-    &= \frac{n^2}{2}-0  &&= \frac{n^2+2n+1}{2} -\frac{1}{2} \\
-    &= \frac{n^2}{2}  &&= \frac{n^2+2n}{2}  \\
-    &= \frac{n^2}{2}  &&= \frac{n(n+2)}{2}
-\end{align*}
+\begin{alignat*}{3}
+    \int_{m-1}^n x dx            &\le \s{i=m}{n} i &&\le \int_{m}^{n+1} x dx \\
+    \frac{x^2}{2} \Big|_0^n      &\le              &&\le \frac{n^2}{2} \Big|_i^{n+1} \\
+    \frac{n^2}{2} -\frac{0^2}{2} &\le              &&\le \frac{{(n+1)}^2}{2} -\frac{1^2}{2} \\
+    \frac{n^2}{2}-0              &\le              &&\le \frac{n^2+2n+1}{2} -\frac{1}{2} \\
+    \frac{n^2}{2}                &\le              &&\le \frac{n^2+2n}{2}  \\
+    \frac{n^2}{2}                &\le              &&\le \frac{n(n+2)}{2}
+\end{alignat*}
 
 
 \subsubsection{Harmonic Sum}
-\begin{align*}
-    &\int_{m}^{n+1} \frac{1}{x} dx &\le \s{i=m}{n} \frac{1}{i} &\le \int_{m-1}^{n} \frac{1}{x} dx \\
-    &\le \ln x \Big|_1^{n+1} &&= \ln(x) \Big|_0^n \\
-    &\le \ln (n+1) -\ln(1) &&= \ln(n) -\ln 0 \\
-    &\le \ln (n+1) - 0 &&= \ln(n) - (-\infty) \\
-    &\le \ln (n+1)  &&= \ln n +\infty \\
-    &&&\le +\infty\\
+\begin{alignat*}{3}
+    \int_{m}^{n+1} \frac{1}{x} dx &\le \s{i=m}{n} \frac{1}{i} &&\le \int_{m-1}^{n} \frac{1}{x} dx \\
+    \ln x \Big|_1^{n+1}           &\le                        &&\le \ln(x) \Big|_0^n \\
+    \ln (n+1) -\ln(1)             &\le                        &&\le \ln(n) -\ln 0 \\
+    \ln (n+1) - 0                 &\le                        &&\le \ln(n) - (-\infty) \\
+    \ln (n+1)                     &\le                        &&\le \ln n +\infty \\
+                                  &                           &&\le +\infty\\
     \intertext{Less than infinity isn't helpful. Let's avoid it by removing the 1 term from the sum, so we don't integrate 0 to 1 for ln x} \\
-    &&&\le 1+ \int_{1}^{n} f(x) dx \\
-    &&&\le 1+ \ln(x) \Big|_1^n \\
-    &&&\le 1+ \ln n - \ln 1 \\
-    &&&\le 1+ \ln n -0 \\
-    &&&\le \ln(n) + 1 \\
-\end{align*}
+    &  &  & \le 1+ \int_{1}^{n} f(x) dx \\
+    &  &  & \le 1+ \ln(x) \Big|_1^n \\
+    &  &  & \le 1+ \ln n - \ln 1 \\
+    &  &  & \le 1+ \ln n -0 \\
+    &  &  & \le \ln(n) + 1 \\
+\end{alignat*}
 
 
    % ███████               ██                  ████     ██            ██               ██   ██
@@ -1225,26 +1245,26 @@ Did you know that some algorithms can be faster than others? It's true!
 
 \url{https://en.wikipedia.org/wiki/Time_complexity}
 \begin{center}
-    \begin{tabular}{lll}
-        Name                 & Running time (T(n))        & Examples of running times        \\ \toprule
-        Constant             & $ O(1)           $         & 10                               \\ \midrule
-        Iterated logarithmic & $ O(\log^* n)      $       & \\ \midrule
-        Log-logarithmic      & $ O(\log \log n)   $       & \\ \midrule
-        Logarithmic          & $ O(\log n) $              & $ \log n, \log(n^2)$             \\ \midrule
-        Polylogarithmic      & $ poly(\log n) $           & $ (\log n)^2  $                  \\ \midrule
-        Fractional power     & $ O(n^c) where 0 < c < 1 $ & $ n^{1/2}, n^{2/3}$              \\ \midrule
-        Linear               & $ O(n) $                   & $ n$                             \\ \midrule
-        N log star n         & $ O(n \log^* n) $          & $   $                            \\ \midrule
-        Linearithmic         & $ O(n \log n)$             & $  n \log n, \log n! $           \\ \midrule
-        Quadratic            & $ O(n^2) $                 & $  n^2 $                         \\ \midrule
-        Cubic                & $ O(n^3) $                 & $  n^3 $                         \\ \midrule
-        Polynomial           & $ 2^{O(\log n)} = poly(n)$ & $  n, n\log n, n^{10} $          \\ \midrule
-        Quasi-polynomial     & $ 2^{poly(\log n)} $       & $  n^{\log \log n}, n^{log n}$   \\ \midrule
+    \begin{tabular}{l l l}
+        Name                 & Running time $T(n)$                & Examples of running times        \\ \toprule
+        Constant             & $ O(1)           $                 & 10                               \\ \midrule
+        Iterated logarithmic & $ O(\log^* n)      $               & \\ \midrule
+        Log-logarithmic      & $ O(\log \log n)   $               & \\ \midrule
+        Logarithmic          & $ O(\log n) $                      & $ \log n, \log(n^2)$             \\ \midrule
+        Polylogarithmic      & $ poly(\log n) $                   & $ {(\log n)}^2  $                  \\ \midrule
+        Fractional power     & $ O(n^c) \text{ where }0 < c < 1 $ & $ n^{1/2}, n^{2/3}$              \\ \midrule
+        Linear               & $ O(n) $                           & $ n$                             \\ \midrule
+        N log star n         & $ O(n \log^* n) $                  & $   $                            \\ \midrule
+        Linearithmic         & $ O(n \log n)$                     & $  n \log n, \log n! $           \\ \midrule
+        Quadratic            & $ O(n^2) $                         & $  n^2 $                         \\ \midrule
+        Cubic                & $ O(n^3) $                         & $  n^3 $                         \\ \midrule
+        Polynomial           & $ 2^{O(\log n)} = poly(n)$         & $  n, n\log n, n^{10} $          \\ \midrule
+        Quasi-polynomial     & $ 2^{poly(\log n)} $               & $  n^{\log \log n}, n^{\log n}$   \\ \midrule
         Exponential (with
-        Linear exponent)     & $ 2^{O(n)} $               & $  1.1^n, 10^n $                 \\ \midrule
-        Exponential          & $ 2^{poly(n)} $            & $   2^n, 2^{n^2}  $              \\ \midrule
-        Factorial            & $ O(n!) $                  & $  n!$                           \\ \midrule
-        Double exponential   & $ 2^{2^{poly(n)}} $        & $  2^{2^n}$                    \\
+        Linear exponent)   & $ 2^{O(n)} $        & $  1.1^n, 10^n $                 \\ \midrule
+        Exponential        & $ 2^{poly(n)} $     & $  2^n, 2^{n^2}  $               \\ \midrule
+        Factorial          & $ O(n\text{!}) $    & $  n\text{!}$                    \\ \midrule
+        Double exponential & $ 2^{2^{poly(n)}} $ & $  2^{2^n}$                      \\
         \bottomrule
     \end{tabular}
 \end{center}
@@ -1284,7 +1304,7 @@ $O(n^{2.9998})$ which could throw off all of our calculations.
 
 \begin{align*}
     \lim_{n \ar \infty} \frac{f(n)}{g(n)} = c \ge 0\lar   f(n) &\in O(g(n))     \\
-    \lim_{n \ar \infty} \frac{g(n)}{f(n)} = c \le 0\lar   f(n) &\in \Omega(g(n))\\
+    \lim_{n \ar \infty} \frac{g(n)}{f(n)} = c \ge 0\lar   f(n) &\in \Omega(g(n))\\
     \lim_{n \ar \infty} \frac{f(n)}{g(n)} =0       \lar   f(n) &\in o(g(n))     \\
     \lim_{n \ar \infty} \frac{g(n)}{f(n)} =0       \lar   f(n) &\in \omega(g(n))\\
 \end{align*}
@@ -1305,14 +1325,1131 @@ $${(\log\log n)}^a = o({(\log n)}^b) $$
 
 \begin{align*}
     n^{\lg n } \;\;&?\;\; {(\lg n)}^n \\
-    (\lg n)(\lg n) &?\;\; n(\lg\lg n) \\
-    {(\lg n)}^2 \;\;&?\;\; n(\lg\lg n) \\
+    &  \lim_{n\ar\infty} \frac{n^{\lg n }}{{(\lg n)}^n} \\
+    &= \lim_{n\ar\infty} \frac{2^{\lg n\cdot \lg n }}{2^{\lg{(\lg n)}^n}} \\
+    &= \lim_{n\ar\infty} \frac{2^{\lg^2 n }}{2^{n\lg(\lg n)}} \\
+    &= 0 \\
+    \therefore n^{\lg n } &= o({(\lg n)}^n) \\
 \end{align*}
 
-Polylogs grow slower than polynomials
+Polylogs grow slower than polynomials, and Quasi-polynomials grow slower than exponentials with variable bases.
+
+
+   % ███████            ██         ██                               ██
+  % ██░░░░░██          ░░         ░██                              ░██
+ % ██     ░░██  ██   ██ ██  █████ ░██  ██  ██████  ██████  ██████ ██████
+% ░██      ░██ ░██  ░██░██ ██░░░██░██ ██  ██░░░░  ██░░░░██░░██░░█░░░██░
+% ░██    ██░██ ░██  ░██░██░██  ░░ ░████  ░░█████ ░██   ░██ ░██ ░   ░██
+% ░░██  ░░ ██  ░██  ░██░██░██   ██░██░██  ░░░░░██░██   ░██ ░██     ░██
+ % ░░███████ ██░░██████░██░░█████ ░██░░██ ██████ ░░██████ ░███     ░░██
+  % ░░░░░░░ ░░  ░░░░░░ ░░  ░░░░░  ░░  ░░ ░░░░░░   ░░░░░░  ░░░       ░░
+\section{Quicksort}
+
+An efficient sorting algorithm developed by Tony Hoare in 1959 while trying to translate Russian.
+Recursively partition the array, put small numbers to the left and large numbers to the right.
+
+\begin{algorithm}
+    \DontPrintSemicolon%
+    \SetKwFunction{QUICKSORT}{\texttt{QUICKSORT}}%%
+    \SetKwFunction{PARTITION}{\texttt{PARTITION}}%%
+    \SetKwProg{Fn}{Function}{is}{end}
+    \Fn{\QUICKSORT{A,p,r}}{%
+        \If{$p<r$}{%
+            $q \gets $\PARTITION{A,p,r}\;
+            \QUICKSORT{A,p,q-1}\;
+            \QUICKSORT{A,q+1,r}\;
+        }
+    }
+    \Fn{\PARTITION{A,p,r}}{%
+        $x \gets A[r]$\;
+        $i \gets p-1$\;
+        \For{$j=p$ to $r-1$}{%
+            \If{$A[j] \le x$}{%
+                $i \gets i+1$\;
+                Exchange{$A[i],A[j]$}\;
+            }
+        }
+        $i \gets i+1$ \;
+        Exchange{$A[i],A[r]$}\;
+        \Return{i}\;
+    }
+\end{algorithm}
+
+\subsection{Comparison Analysis}
+
+First note that \texttt{PARTITION} is always linear in comparisons on $n=r-p+1$ terms.
+The FOR loop runs $n-1$ comparisons regardless of the result of the IF condition.
+
+\subsubsection{Quicksort Worst case comparisons}
+
+The worst case output for \texttt{PARTITION} must occur when the pivot doesn't move,
+and the recursive call to \texttt{QUICKSORT} is only 1 smaller than the previous call.
+Thus, partitioning on n elements gets n-1 comparisons.
+Worst Case Comparisons Occurs when pivot is at far end of array:
+\begin{align*}
+    T(n) & = T(n-1)+n-1 \;\;\;,\;\;\; T(1) =0 \\
+         & =(n-1) + (n-2) + (n-3) + \cdots + 3 + 2 + 1 & \text{pivot = 2} \\
+         & =\s{i=1}{n-1}i \\
+         & = \frac{(n-1)\cdot n}{2}
+\end{align*}
+
+\subsubsection{Quicksort Best case comparisons}
+
+The best case occurs when \texttt{PARTITION} moves the pivot to the middle of the array,
+so that the recursive calls to \texttt{QUICKSORT} are $\frac{n-1}{2}$ smaller than the last call.
+Best Case Comparisons Occurs when pivot is right in the middle of array:
+\begin{align*}
+    T(n) & = 2\cdot T(\frac{n-1}{2})+n-1 \;\;\;,\;\;\; T(1) =0 \\
+         & \le2\cdot T(\frac{n}{2}) +n -1 \\
+         & = n\cdot\lg(n) -n +1 \\
+         & =O(n\cdot\lg n)
+\end{align*}
+
+\subsection{Proof by Constructive Induction}
+
+Mathematical Induction is great at proving an answer is true if you already
+know it. But if you don't know that what the answer is for sure, you can make
+an educated guess, and use induction to derive the right answer. We know the
+answer to the worst case comparisons of quicksort is quadratic, but we don't
+know the coefficients.
+
+For example, let's prove $1+2+3+\cdots+n$ is quadratic.
+$$ \s{i=1}{n} i \text{    Guess} \s{i=1}{n} i = an^2 +bn +c $$
+
+Base case $i=1$. $\s{i=1}{1} i = a{(1)}^2 + b(1) +c \;\;\;= a+b+c \;\;\;= 1$
+
+Inductive Hypothesis: $\s{i=1}{n-1} i = a{(n-1)}^2 + b(n-1) +c$
+\begin{align*}
+    \s{i=1}{n}i &= n + \s{i=1}{n-1} i \\
+    &= n + a{(n-1)}^2 + b(n-1) + c \\
+    &= n + a(n^2 -2n +1) +b(n-1) +c \\
+    &= an^2 +(-2a+b+1)n +a-b+c \\
+    \intertext{If our assumption was true then we should get a system of
+    simultaneous equations matching the quadratic. Then we could solve
+    the system for the coefficients of the result.}
+    a &= a \\
+    b &= -2a+b+1 \\
+    c &= a-b+c \\
+    &a=\frac{1}{2}, a=b, c=0 \\
+    \s{i=1}{n}i &= \frac{1}{2}n^2 + \frac{1}{2}n = \frac{n(n+1)}{2}
+\end{align*}
+
+\subsubsection{Quicksort Worst Case from Recurrence}
+$T(n) = T(n-1)+n-1, \;\;T(1)=0$. Let's guess that the result is quadratic:
+$an^2+bn+c$
+
+Base: $n=1 , a{(1)}^2+b(1)+c=0$
+
+Inductive Hypothesis: Assume $T(n-1) = a{(n-1)}^2+b(n-1)+c$
+\begin{align*}
+    T(n)&= T(n-1)+n-1 \\
+        &= a{(n-1)}^2+b(n-1)+c +n -1 \\
+        &= a(n^2 -2n +1) +b(n-1) +c +n-1 \\
+        &= an^2 (-2a +b +1)n +c-b-1+a \\
+        &\text{Find coefficients} \\
+        a+b+c&=0 \\
+        a&=a \\
+        -2a+b+1&=b \\
+        c-1+a-b&=c \\
+        &a=\frac{1}{2}\\
+        &b=-\frac{1}{2}\\
+        &c=0\\
+    T(n)&=\frac{1}{2}n^2 - \frac{1}{2}n \\
+        &= \frac{n(n-1)}{2}
+\end{align*}
+
+
+
+\subsubsection{Quicksort Best Case from Recurrence}
+$T(n) = 2T(n/2)+n-1, \;\;T(1)=0$. Guess upper bound: $T(n)=an\lg n$
+
+
+Base: $n=1 , a(1)\lg(1)=0$
+
+Inductive Hypothesis: By strong induction, assume $T(k) = ak\lg k$ for all $k<n$
+\begin{align*}
+    T(n)&= 2T(n/2)+n-1 \\
+    &\le 2\left[ a\cdot \frac{n}{2} \cdot\lg\frac{n}{2} \right] +n-1 \\
+    &= an[\lg n - \lg 2] +n-1 \\
+    &= an[\lg n -1] +n-1 \\
+    &= an\lg n -an +n -1 \\
+    &= an\lg n +(-a+1)n -1 \\
+    \text{To be true, must be} &\le an\lg n \\
+    &\text{drop -1 because <} \\
+    &(-a+1) \text{must be} \le 0, \ar a\ge1 \\
+    \intertext{So a constant a greater than or equal to 1 solves the recurrence, but the best case value occurs when a is 1} \\
+    T(n) &\le 1\cdot n\lg n \\
+    &=n\lg n
+\end{align*}
+
+\subsubsection{Average case analysis of quicksort from approximate recurrence.}
+Best case occurs when pivot is in the middle, while worst case occurs when
+pivot is at the end. Let's approximate the average case happening when the
+pivot is at the one and three quarter marks.
+$$T(n) = T(\frac{3n}{4}) + T(\frac{n}{4}) +n -1 \;\;\;,T(1)=0$$
+
+
+Let's guess optimistically that our upper bound is $T(n) \le an\lg n$
+
+Base case n=1: $a(1)\lg(1) = 0 \le 0 \checkmark$
+
+Inductive Hypothesis: By strong induction, assume true for $k<n\;\; T(k) \le ak\lg k$
+
+\begin{align*}
+    T(n) &= T(\frac{3n}{4}) + T(\frac{n}{4}) +n -1 \\
+    &\le a\frac{n}{4}\lg\left( \frac{n}{4} \right) + a\frac{3n}{4}\lg\left( \frac{3n}{4} \right) +n -1 \\
+    &= a\frac{n}{4}\left( \lg n - \lg 4 \right) + \frac{3an}{4}\left( \lg n - \lg 4 + \lg 3 \right)+n -1 \\
+    &= a\frac{n}{4}\lg n - \frac{an}{2} + \frac{3an}{4}\lg n - \frac{3an}{2} + \lg 3 \cdot\frac{3an}{4} +n -1 \\
+    &= an\lg n + \left( -\frac{a}{2} -\frac{3a}{2} +\frac{a\lg 3}{4} +1 \right)n -1 \\
+    &= an\lg n + \left( -2a +\frac{a}{4}\lg 3 +1 \right)n -1 \\
+    \text{To be true, must be} &\le an\lg n \\
+    & -2a +\frac{a}{4}\lg 3 + 1 \le 0 \\
+    & (\frac{\lg 3}{4}-2)a \ge 1 \\
+    & a \ge \frac{1}{2-\frac{3\lg 3}{4}} \\
+    T(n) &\ge\left(\frac{1}{2-\frac{3\lg 3}{4}}\right) n\lg n \\
+    T(n) &\approx 1.23\cdot n \lg n \\
+\end{align*}
+
+\subsubsection{Average case analysis of quicksort from exact recurrence.}
+When we choose a pivot element, the pivot will end up at some index q. We don't know where q is yet.
+Since we will be iterating over the whole array, the probability of choosing a particular index is 1/n.
+Then you have to do the group on the left and the group on the right. And do it for all n indices.
+Solving this will require everything we know to do.
+\begin{align*}
+T(n) &= \s{q=1}{n}\frac{1}{n}( T(q-1) + T(n-q) ) +n -1  \\
+&= \frac{1}{n}\s{q=1}{n}( T(q-1) + T(n-q) ) +n -1  \\ %& \text{separate} \\
+&= \frac{1}{n}\s{q=1}{n}( T(q-1)) + (\frac{1}{n}\s{q=1}{n} T(n-q) ) +n -1 \\ % & \text{Change variable} \\
+\intertext{first is sum of Ts from 0 to n-1 and the other is the downward sum from n-1 to 0. So we get two sums of T} \\
+&= \frac{2}{n} \s{q=0}{n-1} T(q) + n -1 \\
+\intertext{now apply strong constructive induction, guess $an\lg n$} \\
+\text{Base n =1} & a(1)\lg(1) = 0 \checkmark \\
+\text{I.H. For } & 1\le k<n\;\;T(k) \le ak\lg k \\
+T(n) &= \frac{2}{n}\s{q=1}{n-1}T(q) + n-1 \\
+&\le \frac{2}{n} \s{q=1}{n-1}aq\lg q + n -1 \\
+&= \frac{2a}{n} \s{q=1}{n-1} q\lg q + n -1 \\
+&\approx \frac{2a}{n} \int_{1}^{n} x\lg x dx   + n -1 \\
+&= \frac{2a}{n} \left[ \frac{x^2 \lg x }{2} - \frac{x^2 \lg e}{4} +c \right] \Big|_1^n +n -1 \\
+&= \frac{2a}{n} \left[ \frac{n^2 \lg n }{2} - \frac{n^2 \lg e}{4} +c - (\frac{1^2 \lg 1 }{2} - \frac{1^2 \lg e}{4} +c ) \right]  +n -1 \\
+&= \frac{2a}{n} \left[ \frac{n^2 \lg n }{2} - \frac{n^2 \lg e}{4} + \frac{\lg e}{4} \right]  +n -1 \\
+&= an\lg n - \frac{an\lg e }{2} + \frac{a\lg e}{2n} +n -1\\
+&= an\lg n + (\frac{a\lg e}{2}+1)n -1 + \frac{a\lg e}{2n} \\
+\text{need}& -\frac{a \lg e }{2}+1 \le 0 \\
+& a \ge \frac{2}{\lg e} = 2 \ln 2 \approx 1.39 \\
+\intertext{choose a = 1.39 and the last term becomes a number always less than or equal to 1, which is dominated by minus 1} \\
+&\text{and the second highest term becomes 1 minus 1=0} \\
+T(n) &\le 1.39n\lg n \\
+&= \frac{2}{\lg e}n\lg n \\
+&= 2n \ln n \\
+\end{align*}
+
+\subsubsection{New Book method}
+
+Given What is the probability that the smallest and largest elements are
+compared? $(x_1,x_n)? \frac{2}{n}$ If you pick the largest or smallest as the
+pivot, then it will compare against every other element including the other
+extreme. But if you don't pick an extreme the two will be partitioned away and
+never be compared. So on average the number of comparisons you get from
+comparing the smallest and largest is also $\frac{2}{n}$.
+
+What is the probability that $x_i, x_j : (i<j) $ will be compared? If you
+choose a pivot less than i, the two will end up on the same pivot together on
+the large side. If you choose a pivot greater than j, the two will end up on
+the small side together. The only way not to compare the two is to choose a
+pivot in between i and j. That probability is $\frac{2}{j-i+1}$
+
+If you have 2 elements next to one another in the sorted array, they will
+always be compared. Otherwise how will you know? $\frac{2}{(i+1)-i+1} = 1$
 
 
 
 
+\begin{align*}
+    T(n) &= \s{i=1}{n}\s{j=i+1}{n} \\ %\text{prob (x_i is compared to x_j) } \\
+    &=\s{i=1}{n}\s{j=i+1}{n} \frac{2}{j-i+1} \\
+    &=2 \s{i=1}{n} \s{j=i+1}{n} \frac{1}{j-i+1}\\
+    &=2 \s{i=1}{n} (H_{n-i+1} -1) \\
+    &=2 \s{i=1}{n} (H_{i} -1) \\
+    &= 2\s{i=1}{n} H_i - 2\s{i=1}{n} 1 \\
+\end{align*}
+
+Big important insight, that you can calculate the probability that any 2  arbitrary elements can be compared.
+
+\subsection{Is Quicksort In place?}
+
+In place algorithms use a constant amount of extra space, it isn't a function
+of the number of elements n.  Because Quick sort is recursive it can add more
+variables to the stack (multiple versions of q, and r).  So to be in place you
+use extra memory $\Theta(1)$ for algorithm variables + $\Theta(\log n)$ stack
+average.  There isn't really a formal definition of In place.  Informally it's
+that an algorithm doesn't use a lot of extra space.
+
+One way to avoid using much extra space is to check which side of a partition
+is smaller and do that side of the partition first.
+
+% \begin{algorithm}
+%     \If{$p<r$}{%
+%         $q\gets partition(A,p,r)$\;
+%         \If{$q-p < r-q$}{%
+            % QS(A,p,q-1)\;
+            % QS(A,q+1,r)\;
+          % }\Else{%
+            % QS(A,q+1,r)\;
+            % QS(A,p,q-1)\;
+
+\subsection{Randomized pivot selection}
+
+You can use a random pivot element as seen in the book.
+
+\subsection{3 Median Pivot}
+
+You can make sure that you've got a good pivot by picking 3 elements randomly
+and using their median as the pivot. This gives you a much better chance of
+pivoting near the middle.
+
+\subsection{Small Size Optimization}
+
+In practice when qucksort gets down to 10 to 20 elements many implementations use
+a more efficient algorithm like insertion sort to sort the small groups of
+elements.
+
+
+     % ██      ██                         ██   ██   ██                      ██████                                                ██
+    % ████    ░██  █████                 ░░   ░██  ░██                     ██░░░░██                      ██████                  ░░
+   % ██░░██   ░██ ██░░░██  ██████  ██████ ██ ██████░██      ██████████    ██    ░░   ██████  ██████████ ░██░░░██  ██████   ██████ ██  ██████  ██████  ███████
+  % ██  ░░██  ░██░██  ░██ ██░░░░██░░██░░█░██░░░██░ ░██████ ░░██░░██░░██  ░██        ██░░░░██░░██░░██░░██░██  ░██ ░░░░░░██ ░░██░░█░██ ██░░░░  ██░░░░██░░██░░░██
+ % ██████████ ░██░░██████░██   ░██ ░██ ░ ░██  ░██  ░██░░░██ ░██ ░██ ░██  ░██       ░██   ░██ ░██ ░██ ░██░██████   ███████  ░██ ░ ░██░░█████ ░██   ░██ ░██  ░██
+% ░██░░░░░░██ ░██ ░░░░░██░██   ░██ ░██   ░██  ░██  ░██  ░██ ░██ ░██ ░██  ░░██    ██░██   ░██ ░██ ░██ ░██░██░░░   ██░░░░██  ░██   ░██ ░░░░░██░██   ░██ ░██  ░██
+% ░██     ░██ ███  █████ ░░██████ ░███   ░██  ░░██ ░██  ░██ ███ ░██ ░██   ░░██████ ░░██████  ███ ░██ ░██░██     ░░████████░███   ░██ ██████ ░░██████  ███  ░██
+% ░░      ░░ ░░░  ░░░░░   ░░░░░░  ░░░    ░░    ░░  ░░   ░░ ░░░  ░░  ░░     ░░░░░░   ░░░░░░  ░░░  ░░  ░░ ░░       ░░░░░░░░ ░░░    ░░ ░░░░░░   ░░░░░░  ░░░   ░░
+
+\section{Algorithm Strengths and Weaknesses}
+
+\begin{center}
+\begin{tabular}{cccccc}
+    Algorithm  & Comparisons      & Moves                 & Spatial Locality & In Place     & Good Worst Case \\ \toprule
+    Merge Sort & $~n\lg n$        & unknown               & $\checkmark$     & X            & $\checkmark$ \\ \midrule
+    Heap Sort  & $~n\lg n$        & $~n \lg n$            & X                & $\checkmark$ & $\checkmark$ \\ \midrule
+    Quick Sort & $~1.39 n \lg n $ & $~\frac{1}{2}n\lg n $ & $\checkmark$     & $\checkmark$ & X \\
+\end{tabular}
+\end{center}
+
+\subsection{Memory Hierarchy}
+Memory Hierarchy allows further, machine specific optimizations. Doing a lot of
+work in fast memory is preferable to waiting to grab data from slower memories
+Merge sort and quick sort both take advantage of this spacial locality of fast
+memory. It sub sorts the array in pieces that fit into caches. Heap sort
+doesn't as it's sorting mechanism jumps all over the tree. It lacks spatial
+locality. Merge Sort also has the problem that it isn't In-place, so it uses a
+lot of extra memory.
+
+
+ % ██       ██                                      ████████                   ██
+% ░██      ░░                                      ██░░░░░░                   ░██
+% ░██       ██ ███████   █████   ██████   ██████  ░██         ██████  ██████ ██████  ██████
+% ░██      ░██░░██░░░██ ██░░░██ ░░░░░░██ ░░██░░█  ░█████████ ██░░░░██░░██░░█░░░██░  ██░░░░
+% ░██      ░██ ░██  ░██░███████  ███████  ░██ ░   ░░░░░░░░██░██   ░██ ░██ ░   ░██  ░░█████
+% ░██      ░██ ░██  ░██░██░░░░  ██░░░░██  ░██            ░██░██   ░██ ░██     ░██   ░░░░░██
+% ░████████░██ ███  ░██░░██████░░████████░███      ████████ ░░██████ ░███     ░░██  ██████
+% ░░░░░░░░ ░░ ░░░   ░░  ░░░░░░  ░░░░░░░░ ░░░      ░░░░░░░░   ░░░░░░  ░░░       ░░  ░░░░░░
+\section{Linear Sorting Algorithms}
+
+\subsection{Re-evaluating Sort}
+All of our algorithms have thus far been strongly dependent upon comparisons.
+Let's take a closer look at that.
+
+\subsubsection{Find biggest element in array}
+Run one instance of selection sort, find biggest element. $n-1$ comparisons.
+
+\subsubsection{Find second largest element in array}
+
+First idea: form max heap and pull two off the top. Create Heap + sift: $\approx n + \lg n$
+
+\subsubsection{Find k largest elements in array}
+
+Sift again: $n+ (k-1)\lg n$
+
+\subsubsection{Natural approach: Hold a Tournament}
+
+Comparisons are like playing games in a sportsball match. You need to eliminate
+$n-1$ teams to find the best, so you must at least run $n-1$ comparisons.  This
+gives us a lower bound. In a double elimination tournament when one of the
+playing groups loses it must lose again to be eliminated. The superior team
+will never lose. All other teams must lose at most twice. If you lose to
+someone and they lose to someone else, you're no longer second best. So you
+don't need to incur an extra comparison.  If you keep track of who lost to whom
+you'll conserve comparisons and be bound by the height of the tournament
+bracket, $\lg n-1$ When you run the tournament you incur $n-1$ to find the best
+player. Then another $\lg n -1$ to order everyone else, giving $~n+\lg n$
+comparisons.
+
+\subsubsection{Finding Best and Worst}
+
+Run tournament to find best, then take all teams who lost both matches $(n/2)$,
+and run again in reverse. There are $\frac{n}{2}-1$ following comparisons to
+find the worst team. $n-1+\frac{n}{2}-1 = n+\frac{n}{2}-2 \approx \frac{3}{2}n$.
+
+
+   % ██████                              ██   ██                     ████████                   ██
+  % ██░░░░██                            ░██  ░░            █████    ██░░░░░░                   ░██
+ % ██    ░░   ██████  ██   ██ ███████  ██████ ██ ███████  ██░░░██  ░██         ██████  ██████ ██████
+% ░██        ██░░░░██░██  ░██░░██░░░██░░░██░ ░██░░██░░░██░██  ░██  ░█████████ ██░░░░██░░██░░█░░░██░
+% ░██       ░██   ░██░██  ░██ ░██  ░██  ░██  ░██ ░██  ░██░░██████  ░░░░░░░░██░██   ░██ ░██ ░   ░██
+% ░░██    ██░██   ░██░██  ░██ ░██  ░██  ░██  ░██ ░██  ░██ ░░░░░██         ░██░██   ░██ ░██     ░██
+ % ░░██████ ░░██████ ░░██████ ███  ░██  ░░██ ░██ ███  ░██  █████    ████████ ░░██████ ░███     ░░██
+  % ░░░░░░   ░░░░░░   ░░░░░░ ░░░   ░░    ░░  ░░ ░░░   ░░  ░░░░░    ░░░░░░░░   ░░░░░░  ░░░       ░░
+
+\section{Counting Sort}
+
+Say you have a list of duplicate integers in a range and you want to sort them.
+$n$ integers in the range $0,\ldots,k-1$. Sort A into B. So simply count the number of integers of each size, and dole them out in order.
+
+\begin{algorithm}
+    \For{$i=0$ \KwTo$k-1$}{%
+        $C[i] \gets 0$\;
+    }
+    \For{$j=1$ \KwTo$n$}{%
+        $C[A[j]] \gets C[A[i]]+1$\;
+    }
+    $t\gets 0$\;
+    \For{$i=0$ \KwTo$k-1$}{%
+        \For{$j=0$ \KwTo$C[i]$}{%
+            $t\gets t+1$\;
+            $B[t]\gets i$\;
+        }
+    }
+    \caption{Counting Sort}
+\end{algorithm}
+
+The running time is the number of numbers plus the range of the numbers.
+$\Theta(n+k)$.  If you're sorting a lot of numbers in a small range, it's the
+numbers that will dominate. If it's a large range with sparse numbers, the
+range will dominate.
+
+An alternative method is to form the partial sums of C. Where each value in C
+is the number of elements less than or equal to the index. Then iterate
+backwards through the original array. When you encounter an element in A,
+lookup that index in C, then assign an element into B, then decrement the value
+in C. This has the added value of treating each element as a unique entity,
+instead of as simply an integer. So you could do this on comparable objects.
+
+\begin{algorithm}[H]
+    \For{$i=0$ \KwTo$k-1$}{%
+        $C[i] \gets 0$\;
+    }
+    \For{$j=1$ \KwTo$n$}{%
+        $C[A[j]] \gets C[A[i]]+1$\;
+    }
+    \For{$i=1$ \KwTo$k-1$}{%
+        $C[i] \gets C[A[i]]+1$\;
+    }
+    \For{$j=n$ down to $1$}{%
+        $B[C[A[j]]] \gets A[j]$\;
+        $C[A[j]] \gets C[A[j]]-1$\;
+    }
+    \caption{Partial Sum Counting Sort}
+\end{algorithm}
+
+Running time $\Theta(n+k)$.
+
+Now the C array represents the number of numbers less than the value of the index.
+
+Why do we go through A backwards? To maintain stability.
+
+
+ % ███████                  ██ ██            ████████                   ██
+% ░██░░░░██                ░██░░            ██░░░░░░                   ░██
+% ░██   ░██   ██████       ░██ ██ ██   ██  ░██         ██████  ██████ ██████
+% ░███████   ░░░░░░██   ██████░██░░██ ██   ░█████████ ██░░░░██░░██░░█░░░██░
+% ░██░░░██    ███████  ██░░░██░██ ░░███    ░░░░░░░░██░██   ░██ ░██ ░   ░██
+% ░██  ░░██  ██░░░░██ ░██  ░██░██  ██░██          ░██░██   ░██ ░██     ░██
+% ░██   ░░██░░████████░░██████░██ ██ ░░██   ████████ ░░██████ ░███     ░░██
+% ░░     ░░  ░░░░░░░░  ░░░░░░ ░░ ░░   ░░   ░░░░░░░░   ░░░░░░  ░░░       ░░
+
+\section{Radix Sort}
+Sort on the least significant digit, then the 2nd least significant digit,
+etcetera until the largest digit arrives. This only works if a stable sort is
+used for each intermittent pass over a digit.
+
+Proved by example in lecture. Proved by induction on the intermittent sorts.
+
+\begin{tabular}{lcc}
+    Attribute & Value & Variable \\ \toprule
+    Size      & 10    & n \\ \midrule
+    Radix     & 9     & r \\ \midrule
+    Digits    & 3     & d \\ \midrule
+\end{tabular}
+
+Running Time: $\Theta(d(n+r))$
+
+\subsection{Analysis of running time}
+
+First let's decide which radix is best for generic input. Let's introduce a new
+parameter: Size of Values: $s$. This is the total range of numbers. $s,d,r$ are
+all related by $s=r^d$. If given 6 digit numbers in base 10, $s=10^6$. Taking
+logs we get $\log_r s = d$ This gives us the new Running time of $\Theta(
+(\log_r s)(n+r))$. Taking out the r is trickier. Let's think about optimizing
+this function. We can optimize by trying to find a minimum with respect to r.
+We can do that by taking the derivative and solving for 0.
+
+\begin{align*}
+    {\left[\frac{\ln s}{\ln r}(n+r) \right]}^{\prime} & = (\ln s) \frac{\ln r - \frac{1}{r}(n+r)}{{(\ln r)}^2} \\
+                                                      & = (\ln s) \frac{\ln r -\frac{n}{r}}{{(\ln r)}^2} = 0 \\
+    0                                                 & = \ln r - \frac{n}{r}  \\
+    r                                                 & = \frac{n}{\ln r}  \\
+    r                                                 & = \frac{n}{\ln ( \frac{n}{\ln n}) } \\
+                                                      & = \frac{n}{\ln n - \ln\ln n} \\
+                                                      & \approx \frac{n}{\ln n} \\
+\end{align*}
+
+So surprisingly the running time of radix sort can depend entirely on the input size, and not on the range of values.
+
+$\Theta(\frac{\ln s}{\ln(\frac{n}{\ln n})}(n+\frac{n}{\ln n}))$
+
+$\Theta(\frac{n \ln s}{\ln n} )$
+
+But that's not a great number, so in real life pick the closest power of 2.
+It's nicest for the computer, and a digit looks like a set of bits. Take every
+group of r bits and compare based on those bits and return them. So we want to
+use Radix sort when it's running time is less than Quicksort.
+
+\begin{align*}
+\Theta\left( \frac{n\log s}{\log n } \right) &< \Theta\left( n \log n \right)
+\Theta\left( \log s \right) &< \Theta\left( \log^2 n \right)
+\log s &< \Theta\left( \log n \right)\log n
+&={\log n}^{\Theta(\log n)}
+s&<n^{\Theta\left( \log n \right)}
+\end{align*}
+
+So Radix sort is theoretically better when the range is relatively small. But
+for 1 million numbers in binary, that gives us a very large range:
+$1,000,000^{20}$
+
+It's space-wise inefficient, but has spatial locality.
+
+%  ██████                   ██               ██      ████████                   ██
+% ░█░░░░██                 ░██              ░██     ██░░░░░░                   ░██
+% ░█   ░██  ██   ██  █████ ░██  ██  █████  ██████  ░██         ██████  ██████ ██████
+% ░██████  ░██  ░██ ██░░░██░██ ██  ██░░░██░░░██░   ░█████████ ██░░░░██░░██░░█░░░██░
+% ░█░░░░ ██░██  ░██░██  ░░ ░████  ░███████  ░██    ░░░░░░░░██░██   ░██ ░██ ░   ░██
+% ░█    ░██░██  ░██░██   ██░██░██ ░██░░░░   ░██           ░██░██   ░██ ░██     ░██
+% ░███████ ░░██████░░█████ ░██░░██░░██████  ░░██    ████████ ░░██████ ░███     ░░██
+% ░░░░░░░   ░░░░░░  ░░░░░  ░░  ░░  ░░░░░░    ░░    ░░░░░░░░   ░░░░░░  ░░░       ░░
+\section{Bucket Sort}
+
+Assume you have a uniformly distributed array of real numbers between 0 and 1.
+Create n buckets.
+
+\begin{algorithm}
+    Clear B\;
+    \For{$i=1 \KwTo n $}{%
+        Put A[i] into bucket $B\left[ \lfloor n\cdot A[i] \rfloor \right]$\;
+    }
+    Sort each bucket\;
+    Concatenate each bucket\;
+\end{algorithm}
+
+On average there will be 1 element per bucket. If you can rely on the buckets
+in the worst case not being very large you can use a quadratic sort within the
+bucket and still get a linear running time.
+
+You can even apply this to non uniform distributions. Assume a Normal
+distribution. Simply change the size of the buckets relative to the mean, with
+buckets closer to the mean having a smaller range and ones farther from the
+range on either side being larger.
+
+Also space wise inefficient, but has spacial locality.
+
+
+  % ████████          ██                   ██   ██
+ % ██░░░░░░          ░██                  ░██  ░░
+% ░██         █████  ░██  █████   █████  ██████ ██  ██████  ███████
+% ░█████████ ██░░░██ ░██ ██░░░██ ██░░░██░░░██░ ░██ ██░░░░██░░██░░░██
+% ░░░░░░░░██░███████ ░██░███████░██  ░░   ░██  ░██░██   ░██ ░██  ░██
+  %      ░██░██░░░░  ░██░██░░░░ ░██   ██  ░██  ░██░██   ░██ ░██  ░██
+ % ████████ ░░██████ ███░░██████░░█████   ░░██ ░██░░██████  ███  ░██
+% ░░░░░░░░   ░░░░░░ ░░░  ░░░░░░  ░░░░░     ░░  ░░  ░░░░░░  ░░░   ░░
+\section{Selection}
+
+How do we select the kth smallest element from a group of numbers?
+How do we select the median from a group of numbers?
+Median $= n+\frac{n}{2}\lg n$
+
+\begin{algorithm}
+    \SetKwProg{Fn}{Function}{is}{end}%
+    \SetKwFunction{SEL}{SELETCT}%
+    \Fn{\SEL{A,k,p,r}}{%
+        Find Approximate median for `qth smallest'\;
+        Partition based on `qth smallest'\;
+        \If{$k<q-p$}{%
+            \SEL{A,k,p,q-1}\;
+        }\ElseIf{k>q-p+1}{%
+            \SEL{A,k-q-p+1,q+1,r}\;
+        }\Else{k=q-p+1}{return{q,A[q]}\;}
+    }
+\end{algorithm}
+
+Take the list and find some approximate median, then look on the left or right
+side depending on how k compares to our approximate median.
+
+\subsection{Analyzing the recurrence}
+
+It sounds like selection should be a very important problem, but in real life it doesn't come up very much.
+
+\subsubsection{Lower Bound}
+Let's assume we know the true median, or that our approximate median is good enough.
+
+\begin{align*}
+    T(n) &= n - 1 + T\left( \lceil \frac{n-1}{2} \rceil \right) \\
+    &\approx T(\frac{n}{2}) + n -1 \\
+    &\approx 2n -1 - \lg n \\
+    &\approx 2n
+\end{align*}
+
+So if we got really lucky and got the true median we could find the kth element
+in linear time. As such we have a reasonable assumption for our lower bound.
+You'll never do better than 2n comparisons in a real case when you don't have
+the perfect median.
+
+\subsection{Constrained case analysis}
+
+Let's assume that we get a q at the $\frac{1}{4}$ mark, and assume that our k is always on the larger side.
+
+\begin{align*}
+    T(n) &= n -1 + T(\frac{3n}{4}) \\
+    &= T(\frac{3n}{4}) + n -1 \\
+    &\approx (n-1) + (\frac{3}{4}n-1) + ({\frac{3}{4}^2}n-1) + \ldots \\
+    &= \frac{1}{1-3/4}n -c\log n \\
+    &\approx 4n
+\end{align*}
+
+For the general fractional partition.
+
+\begin{align*}
+    T(n) &= n -1 + T((1-r)n) \\
+    &= T((1-r)n) + n -1 \\
+    &\approx (n-1) + ( (1-r)n-1) + ({(1-r)}^2n-1) + \ldots \\
+    &= \frac{1}{1-1+r}n -c\log n \\
+    &\approx \frac{1}{r}n
+\end{align*}
+
+Absolute worst case q.
+
+\begin{align*}
+    T(n) &= n-1 + T(n-1) \\
+    &= (n-1) + (n-2) + (n-3) + \ldots \\
+    &= \frac{(n-1)n}{2} \\
+    &\approx \frac{n^2}{2} \\
+\end{align*}
+
+
+\subsection{Average case Analysis}
+
+Sum over all possible pivots and let's assume you always end up on the bigger
+side, for the pessimistic view. So we get the probabilistic analysis.
+
+\begin{align*}
+    T(n) &= n-1 + \s{q=1}{n}\frac{1}{n}\cdot T(\max(q-1,n-q)) \\
+    &= \frac{2}{n}\s{\frac{n}{2}}{n-1}T(q) \\
+    &\text{Constructive Induction, guess the algorithm is linear} \\
+    &\text{guess } T(n) \le an \\
+    &= n-1 + \frac{2}{n}\s{\frac{n}{2}}{n-1}aq \\
+    &= n-1 + \frac{2a}{n}\s{\frac{n}{2}}{n-1}q \\
+    &= \frac{2a}{n}\left[ \s{q=1}{n-1} - \s{q=1}{\frac{n}{2}-1} \right] + n-1 \\
+    &= \frac{2a}{n}\left[ \frac{n(n-1)}{2}-\frac{\frac{n}{2}(\frac{n}{2}-1)}{2} \right] + n -1 \\
+    &= \frac{2a}{n}\left[ \frac{n^2}{2}-\frac{n}{2}-\frac{n^2}{8}\frac{n}{4}\right] + n -1 \\
+    &= an -a -\frac{an}{4}+\frac{a}{2} +n -1 \\
+    &= \frac{3}{4}an - \frac{a}{2} + n -1 \\
+    &= (\frac{3}{4}a + 1)n - \frac{a}{2}-1  \;\;\;\text{for induction to work} \le an \therefore a \ge 4 \\
+    T(n) &\approx 4n \\
+\end{align*}
+
+
+ % ████     ████              ██ ██
+% ░██░██   ██░██             ░██░░
+% ░██░░██ ██ ░██  █████      ░██ ██  ██████   ███████   ██████
+% ░██ ░░███  ░██ ██░░░██  ██████░██ ░░░░░░██ ░░██░░░██ ██░░░░
+% ░██  ░░█   ░██░███████ ██░░░██░██  ███████  ░██  ░██░░█████
+% ░██   ░    ░██░██░░░░ ░██  ░██░██ ██░░░░██  ░██  ░██ ░░░░░██
+% ░██        ░██░░██████░░██████░██░░████████ ███  ░██ ██████
+% ░░         ░░  ░░░░░░  ░░░░░░ ░░  ░░░░░░░░ ░░░   ░░ ░░░░░░
+\section{Finding Median explicitly during selection}
+
+Take the numbers and put them into a 2 dimensional grid with 5 rows and n/5 columns.
+
+Computer Memory is a 1 dimensional array, meaning that representing a 2
+dimensional array requires a clever trick to access.  A[i,j] Represented
+differently in row major order vs column major order.  Column major order
+A[5(i-1) + j]% A[5(j-1) + i]
+% Row major order A[\frac{n}{5} (i-1)+j]
+
+Without using very specific pseudocode, let's look theoretically at how
+something like this algorithm might work at a very high level.
+
+\begin{algorithm}
+    \DontPrintSemicolon%
+    Put items into 5x$\frac{n}{5}$ grid\;
+    Bubble Sort\; \tcp{Find median of each column. 10*n/5 = 2n comparisons.}
+    Find the median of these medians recursively. \tcp{smaller subset of elements it should take $T(n/5)$ comparisons.}
+    Move columns with small medians left and columns with large medians right. \tcp{This puts the median of medians in the middle element.}
+    Partition using the median of medians. \tcp{Partitioning takes $n-1$ comparisons.}
+    Recursively select on correct side, knowing what we know about median of medians. \tcp{Takes $T(\frac{7n}{10})$ comparisons.}
+\end{algorithm}
+
+
+$\begin{array}{cccccccccccccc}
+    \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square \\
+    \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square \\
+    \blacksquare & \blacksquare & \blacksquare & \blacksquare & \blacksquare & \blacksquare & M &  \blacksquare &
+    \blacksquare & \blacksquare & \blacksquare & \blacksquare & \blacksquare \\
+    \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square \\
+    \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square & \square \\
+\end{array}$
+
+\subsection{Worst Case analysis}
+    About 25\% of elements are guaranteed to be smaller, and about 25\% are
+    guaranteed to be bigger than the median of medians.  The exact value is
+    $\frac{3}{10}n$ This gives us an upper bound on the size of a recursive
+    call to partition at $\frac{7}{10}n$, which is the remaining number of
+    elements to recurse over.
+
+\begin{tikzpicture}
+
+    \draw (0,0) rectangle (15,1);
+    \draw[decorate, decoration={brace}, yshift=2ex]  (0,1) -- node[above=1ex] {$\frac{3}{10}n$}  (4,1);
+    \draw[decorate, decoration={brace}, yshift=-2ex]  (15,0) -- node[below=0ex] {$\frac{7}{10}n \rightarrow$ remaining number of elements to recurse over}  (4.5,0);
+    \draw (4,0.5) circle (0.3cm);
+
+\end{tikzpicture}
+
+    \begin{align*}
+        T(n) &\le 2n + T(\frac{n}{5})+T(\frac{7}{10}n)+ n - 1  \\
+        &= T(\frac{n}{5}) + T(\frac{7}{10}n) + 3n -1 \;\;\text{Constructive induction, guess } T(n) \le an \\
+        &\le a\frac{n}{5} + an\frac{7}{10} + 3n -1 \\
+        &= \left( \frac{9}{10}+3 \right)n -1 \\
+        &\text{need } an \implies \;\;need\;\; \frac{9}{10}a + 3 \le a \therefore a \ge 30 \\
+        \therefore T(n) &\le 30n \\
+    \end{align*}
+
+    Median is doable in linear time, but 30 is a very large coefficient.
+    Compare it to quick sort at $n\lg{n}$,n must be $\sim 2^{30}$ for our
+    linear median selection to be better.
+
+\subsection{Theory}
+    Say the upper bound, as some researchers claim to have found, that the upper bound on median selection is 3n.
+
+    \begin{alignat*}{3}
+        2n &< T(n) &< n 3n \\
+        (2+\varepsilon)n && (3-\delta)n \\
+        & T(n) \approx \frac{5}{2}n \\
+    \end{alignat*}
+
+
+   % ████████                           ██            ██      ██                         ██   ██   ██
+  % ██░░░░░░██                  ██████ ░██           ████    ░██  █████                 ░░   ░██  ░██
+ % ██      ░░  ██████  ██████  ░██░░░██░██          ██░░██   ░██ ██░░░██  ██████  ██████ ██ ██████░██      ██████████   ██████
+% ░██         ░░██░░█ ░░░░░░██ ░██  ░██░██████     ██  ░░██  ░██░██  ░██ ██░░░░██░░██░░█░██░░░██░ ░██████ ░░██░░██░░██ ██░░░░
+% ░██    █████ ░██ ░   ███████ ░██████ ░██░░░██   ██████████ ░██░░██████░██   ░██ ░██ ░ ░██  ░██  ░██░░░██ ░██ ░██ ░██░░█████
+% ░░██  ░░░░██ ░██    ██░░░░██ ░██░░░  ░██  ░██  ░██░░░░░░██ ░██ ░░░░░██░██   ░██ ░██   ░██  ░██  ░██  ░██ ░██ ░██ ░██ ░░░░░██
+ % ░░████████ ░███   ░░████████░██     ░██  ░██  ░██     ░██ ███  █████ ░░██████ ░███   ░██  ░░██ ░██  ░██ ███ ░██ ░██ ██████
+  % ░░░░░░░░  ░░░     ░░░░░░░░ ░░      ░░   ░░   ░░      ░░ ░░░  ░░░░░   ░░░░░░  ░░░    ░░    ░░  ░░   ░░ ░░░  ░░  ░░ ░░░░░░
+\section{Graph Algorithms}
+
+Graph description.
+
+Undirected graph List representation is a bit awkward because it double counts
+shared edges. Altering an edge on one vertex requires altering the edge on its
+partner too. Requiring that you traverse both lists. One awkward way to
+alleviate this is to keep extra pointers between the list elements in shared
+edges.
+
+\subsection{Memory Usage}
+
+Matrix, where n = number of vertices, Memory usage = $\Theta(n^2)$
+
+List, where m = number of edges, Memory usage = $\Theta(m+n)$
+
+How big can m be? M can be as large as $n^2$, but will probably be smaller.
+
+You could also use a bit matrix of size $\frac{n^2}{\text{word size}}$.
+
+\subsection{Edge Lookup}
+List: $\Theta(n)$
+Matrix: $\Theta(1)$
+
+\subsection{List all Edges}
+
+List, Go down each index, then traverse each list. Amortized analysis is to
+visit n elements. $\Theta(m+n)$.
+
+Matrix, Go across each row, looking at all the 0s, even when you don't care
+about them. $\Theta(n^2)$.
+
+\subsection{Take aways}
+
+Typically we want to use the Adjacency list representation, because it's linear
+for in the average case.
+
+\subsection{Changing the number of nodes }
+
+\subsubsection{Adding Nodes}
+Add dummy values that you can fill later to the next power of 2. If you have 11
+nodes build a matrix with 16 columns and just read the first 11, when a new
+node is added just use the dummy space, when you reach 17 you need to copy the
+old matrix into the new one of size 32.
+
+\subsubsection{Removing Nodes}
+
+Shrink the array in a way similar to adding a node.
+
+\subsection{Depth First Search}
+
+\begin{algorithm}
+    Mark v at visited\;
+    for all v such that (u,v) is an edge and v has not been visited \;
+    DFS{v}\;
+\end{algorithm}
+
+Adjacency Matrix: $O(n^2)$
+
+Adjacency List: $O(n+m)$
+
+\subsubsection{Applications}
+    Identify Connected Components.
+
+\subsection{Breadth First Search}
+
+    While depth first search uses a recursive call, or a stack (which are
+    naturally similar in modern machines) BFS uses a queue, which while similar
+    in order analysis for most things is not naturally represented in a stack
+    based machine.
+
+    Does have some nice applications, like shortest distance algorithms.
+
+\subsection{Identifying Connected Components}
+
+    A graph is connected if there is a path from every vertex to every other vertex in the graph.
+
+    A connected component is a connected subgraph, or a connection of such components.
+
+\begin{algorithm}[H]
+    \SetKwProg{Fn}{Function}{is}{end}%
+    \SetKwFunction{Component}{Component}%
+    \SetKwFunction{Compvisit}{Compvisit}%
+    \Fn{\Component{G}}{%
+        \For{all $x\in V[G]$}{%
+            $visited[x] \gets False$\;
+            $t\gets 0$\;
+        }
+        \For{all $x \in V[G]$}{%
+            \If{not visited[x]}{%
+                $t\gets t+1$\;
+                \Compvisit[x];
+            }
+        }
+    }
+
+    \Fn{\Compvisit{x}}{%
+        $visited[x] \gets True$\;
+        $CompNum[x] \gets t$\;
+        \For{all $y \in adj[x]$}{%
+            \If{not visited[y]}{%
+                Compvisit[y]\;
+            }
+        }
+    }
+    \caption{Connected Component}
+\end{algorithm}
+
+Adjacency Matrix: $O(n^2)$
+
+Adjacency List: $O(n+m)$
+
+\subsection{Bridges of K{\"o}ningsberg}
+
+\begin{thrm}[Eulerian Cycle 1736]
+    An undirected, (connected) graph $G=(v,e)$ has an Eulerian Cycle if and only if every vertex is connected and every vertex has even degree.
+\end{thrm}
+
+
+
+ % ███████              ██   ██            ██      ██                         ██   ██   ██
+% ░██░░░░██            ░██  ░██           ████    ░██  █████                 ░░   ░██  ░██
+% ░██   ░██  ██████   ██████░██          ██░░██   ░██ ██░░░██  ██████  ██████ ██ ██████░██      ██████████   ██████
+% ░███████  ░░░░░░██ ░░░██░ ░██████     ██  ░░██  ░██░██  ░██ ██░░░░██░░██░░█░██░░░██░ ░██████ ░░██░░██░░██ ██░░░░
+% ░██░░░░    ███████   ░██  ░██░░░██   ██████████ ░██░░██████░██   ░██ ░██ ░ ░██  ░██  ░██░░░██ ░██ ░██ ░██░░█████
+% ░██       ██░░░░██   ░██  ░██  ░██  ░██░░░░░░██ ░██ ░░░░░██░██   ░██ ░██   ░██  ░██  ░██  ░██ ░██ ░██ ░██ ░░░░░██
+% ░██      ░░████████  ░░██ ░██  ░██  ░██     ░██ ███  █████ ░░██████ ░███   ░██  ░░██ ░██  ░██ ███ ░██ ░██ ██████
+% ░░        ░░░░░░░░    ░░  ░░   ░░   ░░      ░░ ░░░  ░░░░░   ░░░░░░  ░░░    ░░    ░░  ░░   ░░ ░░░  ░░  ░░ ░░░░░░
+\section{Shortest Path Algorithms}
+\textbf{Types}
+\begin{itemize}
+    \item Single source, Single sink.
+    \item All Pairs.
+    \item Single source.
+\end{itemize}
+
+It's very hard to solve the Single source, single sink problem without also
+solving the single source problem for every node along the way. Same is true
+for All pairs.
+
+\subsection{Dijkstra's Algorithm}
+
+\begin{algorithm}[H]
+    \For{all $x \in V[G]$}{\tcp{$\Theta(n)$}
+        $D[x] \gets \infty$\;
+        $\Pi[x] \gets NIL$\;
+    }
+    $Q \gets V[G]$ \tcp{Q will hold the vertices which haven't been checked off yet}
+    $D[a] \gets 0$\;
+    \While{$Q \neq \emptyset$}{\tcp{$\Theta(n)$}
+        $x \gets $Pop-minimum[Q]\;
+        \For{all y adjacent to x in Q}{\tcp{Depends on implementation. Can be adjacency matrix, checkable in $\Theta(n)$}
+            \If{$D[x] + W[x,y] < D[y]$}{\tcp{W[x,y] is the weight of edge x,y}
+                $D[y] \gets D[x] + W[x,y]$\;
+                $\Pi[y] \gets x$\;
+            }
+        }
+    }
+\end{algorithm}
+
+This bears a similarity to Breadth First Search. From the source, you reach the
+vertices separated by 1 edge first, then those separated by 2 edges, then 3,
+etc.  This forms an expanding shell of visited nodes with known shortest
+distance.  We have connections to edges outside the shell, with known edge
+weights. Since we are picking the smallest such edge, the BFS-like process
+guarantees that you determine the shortest path to that vertex.
+
+This only works when you have non-negative weight edges.
+
+\subsubsection{Correctness Proof}
+
+Base case: Nothing is in the circle, except the source vertex with distance 0.
+
+Inductive Step: Remove smallest edge weight from consideration and update
+connecting vertices if smaller.
+
+Since you know the shortest path to everything in the circle, the available
+path to the next shortest edge is guaranteed to be the shortest path to that
+vertex.
+
+\subsubsection{Implementation details}
+Create Q as array. Let Q hold 1's for vertices that haven't been eliminated
+yet, and 0's otherwise. Naive approach is to travel Q looking for 1, lookup
+weight in D and track smallest value. If implemented with Adjacency Matrix, the
+whole thing done in $\Theta(n^2)$.
+
+The alternative is to use a priority queue / heap for Q, removing the smallest
+value. This necessitates some extra heap functions to grab an arbitrary node in
+the heap and change its weight. That let's you pop from the heap in logarithmic
+time. There's an additional requirement to visit $|adj(x)|$ additional vertices,
+and update them with our heap manipulation function to update weight, which is
+an additional $\Theta(\lg n)$ Since Dijkstra does this for every element the
+running time is $\Theta(m\cdot\lg n)$.
+
+So if your graph is dense it's better to use the Adjacency Matrix algorithm,
+which is quadratic in the number of vertices. If your graph is sparse it's
+better to use the $m\log n$ algorithm with a priority queue.
+
+Of course in reality the quadratic, Adj. Matrix algorithm is usually better at
+the low level because of spatial locality.
+
+
+ % ████     ██ ███████          ██████                                ██           ██
+% ░██░██   ░██░██░░░░██        ██░░░░██                      ██████  ░██          ░██
+% ░██░░██  ░██░██   ░██       ██    ░░   ██████  ██████████ ░██░░░██ ░██  █████  ██████  █████  ███████   █████   ██████  ██████
+% ░██ ░░██ ░██░███████  █████░██        ██░░░░██░░██░░██░░██░██  ░██ ░██ ██░░░██░░░██░  ██░░░██░░██░░░██ ██░░░██ ██░░░░  ██░░░░
+% ░██  ░░██░██░██░░░░  ░░░░░ ░██       ░██   ░██ ░██ ░██ ░██░██████  ░██░███████  ░██  ░███████ ░██  ░██░███████░░█████ ░░█████
+% ░██   ░░████░██            ░░██    ██░██   ░██ ░██ ░██ ░██░██░░░   ░██░██░░░░   ░██  ░██░░░░  ░██  ░██░██░░░░  ░░░░░██ ░░░░░██
+% ░██    ░░███░██             ░░██████ ░░██████  ███ ░██ ░██░██      ███░░██████  ░░██ ░░██████ ███  ░██░░██████ ██████  ██████
+% ░░      ░░░ ░░               ░░░░░░   ░░░░░░  ░░░  ░░  ░░ ░░      ░░░  ░░░░░░    ░░   ░░░░░░ ░░░   ░░  ░░░░░░ ░░░░░░  ░░░░░░
+\section{NP-Completeness}
+
+Goal is to separate problems easy to solve from those hard to solve. Loosely
+speaking easy means polynomial time and hard means exponential time.
+
+These are not perfect definitions, in spite of that fact it's still okay.
+
+\begin{itemize}
+    \item Nature is kind to us. Natural problems that are polynomial time tend to have
+low degree. Not a theorem, just an empirical statement.
+
+    \item We don't really know what a computer is. Real world computers have memory
+hierarchy and variable running times, there's concurrency as well. All models
+are equivalent up to polynomial time. One exception is quantum computers, but
+not really proven in reality.
+
+    \item Polynomials are closed under addition, multiplication, and composition.
+% $4n^3 + 6n^2 = 4n^3 + 6n^2$
+% $4n^3 \cdot 6n^2 = 24n^5$
+% $4n^3 composed 6n^2 = 4{(6n^2)}^3$
+\end{itemize}
+
+\subsection{Decision Problem Theory}
+Decision problems are yes/no questions.
+
+Does a graph have an Eulerian cycle? But not What is the Eulerian Cycle.
+
+\begin{defn}[P]
+    Decision problems solvable in polynomial time.
+\end{defn}
+
+\begin{defn}[NP]
+    Decision problems verifiable in polynomial time with a certificate.
+\end{defn}
+
+Problems in the class NP have the dichotomy that if the answer is yes you can
+demonstrate it in polynomial time, but many of them are not able to be
+disproved in polynomial time. When the answer is yes it's easy to prove, otherwise it's very hard.
+
+Certificate is usually the solution to the problem. Example would be the coloring problem from the homework.
+
+
+\begin{defn}[SAT]
+Satisfiability Problem Given a Boolean formula, is there a way of setting the variables to true and
+false such that the formula is true?
+\end{defn}
+
+If it is then it can be evaluated in polynomial time, the certificate is the
+assignment. If it isn't satisfiable the only way to show that is to try every
+possibility of assignments, which takes exponential time.
+
+\subsection{The Class of NP problems}
+
+Is it the case that if something can be solved in polynomial time it can be verified in polynomial time?
+Does $P = NP$? Or more directly, are P and NP-Complete classes distinct?
+No one knows.
+
+NP-Complete: The class of problems that are all equivalent to one another under
+reduction.  Formula-SAT, circuit-SAT and coloring are all the same problem,
+really. They can be reduced to one another.
+
+Most things in real life are in the NP class. Empirical Statement: For problems
+occurring in nature, Once in the class NP, it's either P or NP-Complete.
+There's a theorem that says that if $P \neq NP-Complete$ then there are an
+infinite class of problem between them.
+
+\subsection{Reduction}
+Having proved that a problem is NP complete, how do we prove other problems are also NP complete?
+
+\begin{thrm}
+    Circuit SAT is NP-complete.
+\end{thrm}
+
+\begin{proof}
+    - Show in NP
+    - Show hard for NP
+    - Show that Circuit SAT is at least as hard as some other problem which we know is NP-complete.
+\end{proof}
+
+Formula SAT $\le_p$ Circuit SAT \\
+Circuit SAT $\le_p$ Formula SAT \\
+
+Converting from circuit to formula is harder than the other way. But the two
+are still verifiable in the same class of running time.
+
+\subsection{Traveling Salesman Problem}
+Eulerian Cycles require that you hit every path once, while Hamiltonian Cycles
+require that you hit every vertex once. This is the crux of the traveling
+salesman problem. Hamiltonian Cycles are NP-Complete.
+
+The Traveling Salesman problem is this problem of finding the shortest path that hits all the nodes in a graph.
+
+Because the traveling salesman problem isn't a yes no question the technically
+correct way of formulating it is to ask if there is a path with length less
+than some target length.
+
+This is a generalization of the Hamiltonian Cycle problem, which is NP
+complete, therefore the traveling salesman problem is NP complete.
+
+\subsubsection{theory}
+There were generalizable characteristics of the Eulerian cycle problem that
+allowed Mathematicians to determine proofs around them, but the Hamiltonian
+Cycle problem doesn't have any generalizable characteristics like that and it
+wasn't until the advent of the NP completeness theorem that this was
+understood.
+
+\subsection{Problems between P and NP-Complete}
+
+\begin{itemize}
+    \item Factoring
+    \item Discrete Logarithm
+    \item Graph Isomorphism
+\end{itemize}
+
+Their exact location isn't known.
+
+\subsection{Exam Materials}
+
+Must prove a problem is in class NP by stating what the cert is and showing how to use the cert to verify.
+
+No Reductions.
+
+Show that you can use the fact of the class of the decision problem form of the
+question to derive the class of the optimization problem form.  If you can
+determine the yes/no condition of whether a formula is satisfiable, you can
+determine the certificate for that factor in Polynomial time.
+% Show that it's OK to show the decision version of a problem instead of the
+% optimization version.
+
+\subsubsection{Formula SAT}
+Assume Decision version of Formula SAT is in P. We want to find the assignment.
+
+Given Formula A variables $x_1, x_2, \ldots , x_n$
+
+\begin{algorithm}
+    \SetKwFunction{SATDEC}{SAT-decidability}%
+    \If{not \SATDEC{A}}{\Return{False}}
+    \For{$i=1 \KwTo n$}{%
+        $B \gets A$\;
+        Assign True to $x_i$in A \tcp{Every time you see xi in the formula substitute with true}
+            Simplify to remove True\;
+        \If{not \SATDEC{A}}{%
+            $A \gets B$\;
+            Assign False to xi and simplify\;
+        }
+    }
+    \Return{X}\;
+\end{algorithm}
+
+\subsubsection{Graph Coloring Problem}
+
+Given an integer k, is a graph k-colorable?
+
+That's the decision problem. You can use that to solve the real question of
+what's the smallest number k such that a graph is k-colorable.
+
+\begin{algorithm}[H]
+    \SetKwFunction{Colorable}{Colorable}%
+    $c\gets 1$\;
+    \While{not \Colorable{G,c}}{%
+        $c \gets c+1$\;
+    }
+    \For{i=1 to n}{%
+        \For{d =1 to c }{%
+            Set vertex i to color d\;
+            \If{\Colorable{G',d}}{exit\;}
+        }
+    }
+\end{algorithm}
+
+    Assign arbitrary colors to the graph nodes one at a time and then ask the
+    routine if the graph is still c-colorable. But assignment of colors isn't
+    allowed in our routine. So we need to use a trick.
+
+    Make a complete graph of c vertexes. Then connect our goal vertex in the
+    original graph G to every vertex except the color we want. This forces the
+    color determiner to require a color at that vertex.
+
+    Size of $G^{\prime} = |G|+ c^2 +(c-1)n$
+
+
+ % ████████ ████     ██ ███████
+% ░██░░░░░ ░██░██   ░██░██░░░░██
+% ░██      ░██░░██  ░██░██    ░██
+% ░███████ ░██ ░░██ ░██░██    ░██
+% ░██░░░░  ░██  ░░██░██░██    ░██
+% ░██      ░██   ░░████░██    ██
+% ░████████░██    ░░███░███████
+% ░░░░░░░░ ░░      ░░░ ░░░░░░░
 
 \end{document}
