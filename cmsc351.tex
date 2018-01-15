@@ -27,8 +27,8 @@
 
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 \documentclass[english, 10pt]{article}
+
 \usepackage{notes}
 \usepackage{inconsolata}
 \usepackage[shellescape]{gmp}
@@ -37,8 +37,8 @@
 \newcommand{\thiscoursename}{Algorithms}
 \newcommand{\thisprof}{Dr.\ Clyde Kruskal}
 \newcommand{\me}{Alex Reustle}
-\newcommand{\thisterm}{Spring 2016}
-\newcommand{\website}{http://www.cs.umd.edu/class/spring2016/cmsc351-0101}%chktex 8
+\newcommand{\thisterm}{Fall 2017}
+\newcommand{\website}{http://cs.umd.edu/class/fall2017/cmsc351/}%chktex 8
 \usepackage{ifpdf}
 \ifpdf%
 \DeclareGraphicsRule{*}{mps}{*}{}
@@ -59,7 +59,7 @@
 {\Huge \par}
 {\Large{\noun{\thiscoursename}}}\\
 \vspace{0.1in}
-\vspace{0in}\includegraphics[scale=0.5]{umd_cs.png} \\
+\vspace{0in}\includegraphics[scale=0.3]{umd_cs.jpg} \\
 \vspace{0.1in}{\noun\me} \\
 {\noun\thisprof} \ $\bullet$ \ {\noun\thisterm} \ $\bullet$ \ {\noun{University of Maryland}} \\
 {\ttfamily \url{\website}} \\
@@ -97,7 +97,7 @@
 
 
 \section{Maximum Subarray Problem}
-Given a sequence of integers, find the largest collection which is a sum of adjacent values.
+Given a sequence of integers, find the largest collection which is a sum of adjacent values. Sequence is in an array with indices from 1 to n.
 \[
     3~-5~\underbrace{4~3~-6~4~8}_{Sum = 13}~-5~3~-7~2~1 \\
 \]
@@ -135,7 +135,7 @@ Tangent: since j is the variable, i and 1 are constants. So it can be separated 
 
 \subsection{Analysis of the Algorithm}
 Actual progress: Change a variable to manage sum. Like integrals in calculus. Every technique in calculus for integrations are matched by similar techniques in summations.
-Change of variable by example.
+Change of variable by example. See appendix for examples of summation properties.
 \begin{align*}
     \sum_{i=1}^{n} \sum_{j=i}^{n} \sum_{k=i}^{j} 1 &= \sum_{i=1}^{n} \sum_{j=i}^{n} j-i+1 & \text{By adding 1 $j-i$ times, and fenceposting} \\
     &= \sum_{i=1}^{n} \sum_{j=1}^{n-i+1} j & \text{By change of variable Method} \\
@@ -147,7 +147,7 @@ Change of variable by example.
     &= \frac{n(n+1)(n+2)}{6} \\
 \end{align*}
 
-This first method is $\Theta{\left(n^3\right)}$
+This first method is $\Theta{\left(n^3\right)}$.
 
 \subsection{Methods to improve integer list summation algorithm.}
 Remember previous sums, do not recalculate known data.
@@ -158,7 +158,7 @@ $M\gets0$\;
 \For{i=1 to n}{\
     $S\gets0$\;
     \For{j = i to n}{\
-        $S = S+A[i]$\;
+        $S = S+A[j]$\;
         $M = \max(M,S)$\
     }
 }
@@ -169,7 +169,7 @@ $$
     \sum_{i=1}^{n} \sum_{j=i}^{n} 1 = \sum_{i=1}^n n-i+1 \\
     = \sum_{i=1}^{n} i = \frac{n(n+1)}{2}
 $$
-This new method is $\Theta{n^2} $.
+This new method is $\Theta{\left(n^2\right)} $.
 
 % Further improvements.
 Loosely speaking the maximum sum is just the previous maximum sum, plus the current value.
@@ -188,7 +188,7 @@ $M \gets 0,S \gets 0$\;
 \caption{Linear Subarray }
 \end{algorithm}
 % \end{wrapfigure}
-
+The third method is $\Theta{\left(n\right)} $.\newline
 Correctness of the algorithm stems from proof by induction on $S = \max(S+A[i], 0)$. This is the Loop Invariant.
 
 $$
@@ -242,14 +242,14 @@ Worst case Scenario.
 }
 \end{algorithm}
 
-Major Growth Elements of Bubble sort will be Comparisons and Exchanges.\\
+Major Growth Elements of Bubble sort will be Comparisons and Exchanges (swaps).\\
 
 Best case number of comparisons require you to view every element unconditionally. \\
 \begin{align*}
     \sum_{i=2}^n \sum_{j=1}^{i-1} 1 &= \sum_{i=2}^{n} i-1 \\
     &= \sum_{i=1}^{n-1} (i+1) -1 \\
     &= \sum_{i=1}^{n-1} i \\
-    &= \f{(n-1)n}{2}
+    &= \f{(n-1)n}{2} = \binom{n}{2}& \text{Equivalent to n choose 2}
 \end{align*}
 Comparisons will always occur, regardless of state of list. \\
 
@@ -261,7 +261,7 @@ Worst Case Exchanges occur when the list is reverse sorted. Same number of excha
     Rotations of list permutations are equally likely to be in any position, but are not random because they ignore other possible permutations.\\
 
 \subsection{Average Case Analysis}
-Count Transpositions. Two elements that are out of order related to each other. \\
+Count Transpositions. Two elements that are out of order related to each other. See appendix for details about transpositions. \\
 
 In the best case there are no transpositions. \\
 In the worst case there are n choose 2 transpositions. Every element is out of order with the number of elements below it.
@@ -278,23 +278,23 @@ so the number of average case exchanges will be half the number of comparisons. 
 % ░██ ░██  ░██ ░░░░░██░██░░░░  ░██     ░██  ░██░██   ░██ ░██  ░██         ░██░██   ░██ ░██     ░██
 % ░██ ███  ░██ ██████ ░░██████░███     ░░██ ░██░░██████  ███  ░██   ████████ ░░██████ ░███     ░░██
 % ░░ ░░░   ░░ ░░░░░░   ░░░░░░ ░░░       ░░  ░░  ░░░░░░  ░░░   ░░   ░░░░░░░░   ░░░░░░  ░░░       ░░
-\section{Insertion Sort}
+\section{Insertion Sort with Sentinel}
 
 Every 0 to [i-1] index during the loop will be sorted. \\
-ith term is stored in tmp. Values in the sorted subarray which are larger than the tmp value are brought forward individually until tmp > A[j]. \\
+ith term is stored in tmp. Values in the sorted subarray which are larger than the tmp value are brought forward individually until tmp > A[j]. A sentinel $-\infty$ is used at $A[0]$, so values don't drop off array. \\
 
 \begin{algorithm}
-$A[0] \gets -\infty$\;
+$A[0] \gets -\infty$\; 
 \For{i = 2 to n}{%
     $t \gets A[i]$\;
-    $j =i-1$\;
+    $j \gets i-1$\;
     \While{$A[j] \ge t$}{%
         $A[j+1] \gets A[j]$\;
-        $j{-}{-}$\;
+        $j \gets j-1$\;
     }
     $A[j+1] \gets t$\;
 }
-\caption{Insertion Sort}
+\caption{Insertion Sort with Sentinel}
 \end{algorithm}
 
 \subsection{Analysing Number of Comparisons}
@@ -322,8 +322,7 @@ In the average case we must determine the probability that a given element will 
 So for evaluation we want the expected value over the set $\sum_{x \in X} P(x)\cdot V(x) $.
 
 Starting at location i, go until reach location j-1.
-Probability that 1 element (A[i]) will end up in any location in the subarray is $\f{1}{i}$
-Value is number of moves. Which is (i-j+1).
+Probability (P) that 1 element (A[i]) will end up in any location in the subarray is $\f{1}{i}$. Value (V) is number of moves which is (i-j+1).
 
 \begin{align*}
     \s{i=2}{n} \s{j=1}{i} \frac{1}{i} \cdot (i-j+1) &= \s{i=2}{n} \frac{1}{i} \s{j=1}{i} (i-j+1)  &  \text{Pull out 1/i} \\
@@ -401,10 +400,10 @@ Add another comparison in the algorithm so the A[0] term is unnecessary, by chec
 \begin{algorithm}[H]
     \For{i=2 to n}{%
         $t\gets A[i]$\;
-        $j=i-1$\;
+        $j \gets i-1$\;
         \While{$j > 0 \wedge A[j] > t$}{%
             $A[j+1]\gets A[j]$\;
-            $j{-}{-}$\;
+            $j \gets j-1$\;
         }
         $A[j+1]\gets t$\;
     }
@@ -415,12 +414,12 @@ A note about comparisons. We don't count index value comparisons, because index 
 cost to check as array value comparisons.
 
 \subsection{Best Case Comparisons}
-In the best case, the array is already sorted, so there will just be 1 comparison per iteration of the outer loop. $\s{i=2}{n} 1 = n-1$
+In the best case, the array is already sorted, so there will just be 1 comparison per iteration of the outer loop. $\s{i=2}{n} 1 = (n-2) + 1 = n-1$
 
 \subsection{Worst Case Comparisons}
-In the worst case the array is reverse sorted, and every ith iteration of the loop must compare against all previous $(i-1)$  elements.
+In the worst case, the array is reverse sorted, and every ith iteration of the loop must compare against all previous $(i-1)$  elements.
 \begin{align*}
-    \s{i=2}{n}\s{j=1}{i-1}1 &= \s{i=2}{n} i-1 \\
+    \s{i=2}{n}\s{j=1}{i-1}1 &= \s{i=2}{n} (i-1) \\
     &= \s{i=2}{n} i - \s{i=2}{n} 1 \\
     &= \f{n(n+1)}{2} -1 -(n-1) \\
     &= \f{n(n+1)}{2} -n \\
@@ -437,7 +436,7 @@ HARMONIC SERIES and brick problem.
 How far out can you stack bricks on top of one another? Arbitrarily far out (but not infinitely far out)
 $$H_n = \s{i=1}{n}\frac{1}{i} = 1+\frac{1}{2}+\frac{1}{3}+\frac{1}{4}+\frac{1}{5}+\cdots \approx \ln{n}+1$$
 $$H_n -1 = \s{i=2}{n}\frac{1}{i} = \frac{1}{2}+\frac{1}{3}+\frac{1}{4}+\frac{1}{5}+\cdots \approx \ln{n}$$
-Harmonic Series come up again and again because of the idea that something has a$ \frac{1}{i}$ chance of happening in an iteration.
+Harmonic Series come up again and again because of the idea that something has a $\frac{1}{i}$ chance of happening in an iteration.
 \end{rem}
 What are we saving when we don't have a sentinel? In the event that the ith element is the smallest element in the A[1..i-1] sub-array, we will descend all
 the way to the 1st index of the list. If that happens, we won't have the 1 extra step of comparing against the sentinel. So only when the ith element is
@@ -445,12 +444,12 @@ the smallest seen thus far do we save 1 step.
 Probability that current ith element is smallest in sub array is $\frac{1}{i}$. The value when that occurs is 1.
 Thus over all n elements of the array, on average the sentinel would have cost us $\s{i=2}{n}\frac{1}{i} = H_n -1$ comparisons.
 
-So average Case comparisons without sentinel is average case with sentinel minus average cost of sentinel.
+So average case comparisons without sentinel is average case with sentinel minus average cost of sentinel.
 $\frac{(n-1)(n+4)}{4}-(H_n -1) \approx \frac{(n-1)(n+4)}{4}-\ln{n}$.
 
 \subsection{Exchanges}
 Removing the sentinel from insertion sort adds no new exchanges, nor does it alter when a change might have been done already.
-Best, worst and average cases are all the same, therefore.
+Therefore, the best, worst and average cases are all the same as insertion sort with sentinel.
 
 
 %   ████████          ██                   ██   ██                      ████████                   ██
@@ -478,8 +477,8 @@ Summary: Find biggest element, put at bottom of list, recurse for sub array.
     \caption{Selection Sort}
 \end{algorithm}
 
-\subsection{Best Case Comparisons}
-The comparison is always run, so the comparison value should be the same for each case.
+\subsection{Comparisons}
+The comparison is always run, so the comparison value should be the same for all cases.
 \begin{align*}
     \s{i=2}{n}\s{j=2}{i}1 &= \s{i=2}{n} (i-1) \\
     & = \frac{(n-1)n}{2}\\
@@ -502,13 +501,13 @@ $\sum 1/i = H_n$
 % ░██        ░██░░██████░███     █████ ░░██████   ████████ ░░██████ ░███     ░░██
 % ░░         ░░  ░░░░░░ ░░░     ░░░░░   ░░░░░░   ░░░░░░░░   ░░░░░░  ░░░       ░░
 \section{Merge Sort}
-Divide and Conquer. Recursively split array down to 1, then merge sorted sublists.
+Divide and Conquer. Recursively split array in half down to 1 element, then merge sorted sublists.
 First call of Mergesort is (A,1,n) \\
 
 
 \begin{algorithm}[H]
     MERGESORT (A,p,r)\;
-    //p and r are indecies in array defining sub array.\;
+    //p and r are indices in array defining sub array.\;
     \If{p<r}{%
         $q \gets \lfloor{\frac{p+r}{2}}\rfloor$\;
         MERGESORT (A,p,q)\;
@@ -521,10 +520,10 @@ First call of Mergesort is (A,1,n) \\
 
 \subsection{Merge Comparison analysis}
 \subsubsection{Equal length arrays}
-Merge algorithm is linear over 2 sorted lists of same size. Total number of comparisons in the worst case during merge is $2n-1$, best case comparisons is n, where
+Merge algorithm is linear over 2 sorted lists of same size (n). Total number of comparisons in the worst case during merge is $2n-1$, best case comparisons is n, where
 1 array is strictly greater than the other.
 
-Can't do better than $2n-1$ in worst case, because worst case situation is 2 lists with interleaved values. In this case the granularity of difference is on the scale of 1 value. So you must check every value to ensure against that.
+Can't do better than $2n-1$ in worst case, because worst case situation is 2 lists with interleaved values. In this case the granularity of difference is on the scale of 1 value. So you must check every value to ensure against that. The last remaining value of 2 lists is not compared, which leads to 2n-1.
 
 This gives us very tight bounds and lets us know everything there is to know about merging.
 
@@ -577,8 +576,8 @@ starting at index p and ending at index q. So for the full list, where p=1 and q
                                 child [grow=up] {node (eq1) {$2^k \left( \frac{n}{2^k}-1 \right)$} edge from parent[draw=none]
                                       child [grow=up] {node (eq2) {$\vdots$} edge from parent[draw=none]
                                           child [grow=up] {node (eq3) {$2^2 \left( \frac{n}{2^2}-1 \right)$} edge from parent[draw=none]
-                                              child [grow=up] {node (eq4) {$2\left( \frac{n}{2}-1 \right)$} edge from parent[draw=none]
-                                                  child [grow=up] {node (eq5) {$n-1$} edge from parent[draw=none]}
+                                              child [grow=up] {node (eq4) {$2^1\left( \frac{n}{2}-1 \right)$} edge from parent[draw=none]
+                                                  child [grow=up] {node (eq5) {$2^0\left(n-1 \right)$} edge from parent[draw=none]}
                                       }
                                     }
                                   }
@@ -623,14 +622,13 @@ Because this gives $\lg n$ terms, we can make it a little easier by dropping the
     &= (n\lg n ) - (n-1) \\
     &= n\lg n  - n+1 \\
 \end{align*}
-
 \subsection{Merge Sort Recurrence}
-When expressed as a recurrence relation, the mergesort algorithm given previously behaves like
+When expressed as a recurrence relation, the mergesort algorithm given previously behaves like 
 \begin{align*}
     S(n) &= S\left( \frac{n}{2} \right)+S\left( \frac{n}{2} \right)+n-1 \\
     &= 2\cdot S\left( \frac{n}{2} \right)+n-1 \\
-    \intertext{Which gives the following recurrence relation} \\
-    S(0) &= S(1) = 0 \\
+    \intertext{Which gives the following recurrence relation} 
+    S(0) &= S(1) = 0 & \text{Base case of 0 comparisons with 0 or 1 element}\\
     S(n) &= S\left(\lfloor \frac{n}{2}\rfloor \right) + S\left( \lceil \frac{n}{2} \rceil \right)
 \end{align*}
 
@@ -643,7 +641,7 @@ When expressed as a recurrence relation, the mergesort algorithm given previousl
 % ░██ ███  ░██  ░░██ ░░██████  █████ ░░██████░███     ░██     ░██░███   ░██  ░░██ ░██  ░██ ███ ░██ ░██░░██████  ░░██ ░██░░█████
 % ░░ ░░░   ░░    ░░   ░░░░░░  ░░░░░   ░░░░░░ ░░░      ░░      ░░ ░░░    ░░    ░░  ░░   ░░ ░░░  ░░  ░░  ░░░░░░    ░░  ░░  ░░░░░
 
-\section{Integer arithmetic}
+\section{Integer Arithmetic}
 \subsection{Addition}
 Just like in elementary addition, the time to add 2 n digit numbers is proportional to the number of digits. $\Theta(n)$.
 Since each digit must be used to compute the sum this is the right order for best case time.
@@ -652,7 +650,7 @@ Since each digit must be used to compute the sum this is the right order for bes
 \opadd{1234}{5678}\qquad
 \end{center}
 
-We assume that each digital additions take constant time (with carry also, so ignore that little trouble spot) and label this constant $\alpha$
+We assume that each digital addition takes constant time (with carry also, so ignore that little trouble spot) and label this constant $\alpha$. The time to add 2 n digit numbers is then $\alpha(n)$.
 
 \subsection{Problem size}
 
@@ -663,10 +661,12 @@ expressed in binary as $2^n$, n being the number of binary digits. $\Theta(2^{\f
 
 \subsection{Multiplication}
 
-Elementary school approach to multiplication runs in $n^2$ time because every digit on top is multiplied by every digit on the bottom. \\
+Elementary school approach to multiplication runs in $n^2$ time because every digit on top is multiplied by every digit on the bottom. There are $2n(n-1)$ atomic additions in this elementary approach as described in class.\\
 \begin{center}
     \opmul[displayintermediary=all]{1234}{5678}
 \end{center}
+
+\subsubsection{Recursive Multiplication}
 
 By memorizing the numbers in large bases, say base 100, 2 digit decimal numbers can be treated as 1 digit numbers in base 100.
 That makes the multiplication easier, because there are fewer steps.
@@ -720,8 +720,8 @@ Then, recurse through this method until we reach a base we really have memorized
 $ac$ is an n digit number, as are $ad$, $bc$, $bd$. When adding, $bd$ is not shifted, but $ad$, and $bc$ are shifted by $\frac{n}{2}$ digits, and $ac$ is shifted by n digits.
 Since there's no overlap for $ac$ and $bd$, you can add them simply by concatenation.
 $ad + bc$ takes $\alpha n$ time. That value plus the center (overlapping) segment of $ac+bd$ is also $\alpha n$.
-
-
+\newline
+\newline
 So without writing out the algorithm: $M(n) = 4M\left( \frac{n}{2} \right)+2\alpha n$ which gives us a nice recursion to work on. Let's assume the time to multiply in the base case is $\mu$. The base case is when both of our numbers are 1 digit long $M(1) = \mu$.
 
 \begin{tikzpicture}
@@ -734,17 +734,17 @@ So without writing out the algorithm: $M(n) = 4M\left( \frac{n}{2} \right)+2\alp
         \node[draw] at (8,-4) {$4^{{\lg(n)}}\mu$};
 \end{tikzpicture}
 
-Which is fun, I'm having fun.
+Which is fun, I'm having fun. 
 
 \begin{align*}
     \text{atomic actions} &= \s{i=0}{\lg(n)-1} (4^i (2\alpha\frac{n}{2^i}) ) + 4^{\lg(n)}\mu \\
     &=2\alpha n \s{i=0}{\lg n-1}\frac{4^i}{2^i} \cdots\\
     &=2\alpha n \s{i=0}{\lg n-1}{2^i} \cdots\\
-    &=2\alpha n \left( 2^{\lg n -1 +1} -1 \right) & & \text{geometric series} \\
-    &=2\alpha n \left( n-1 \right) \cdots\\
-    &\cdots & n^{\lg 4} \mu \\
-    &\cdots & n^2 \mu \\
-    &= 2\alpha \left( n^2 -n \right)+\mu n^2
+    &=2\alpha n \left( 2^{\lg n -1 +1} -1 \right) \cdots& & \text{geometric series} \\
+    &=2\alpha n \left( n-1 \right) + 4^{\lg(n)}\mu\\
+    &=2\alpha n \left( n-1 \right) + n^{\lg(4)}\mu & 4^{\lg(n)} \mu = n^{\lg 4} \mu \\
+    &=2\alpha n \left( n-1 \right) + n^{2}\mu & n^{\lg 4} \mu = n^2 \mu \\
+    &=2\alpha n \left( n-1 \right)+n^2 \mu
 \end{align*}
 
 We're doing $n^2$ multiplications and $n^2$ additions, so our application of
@@ -753,8 +753,8 @@ way!
 
 \subsection{Better Multiplication}
 
-Because of the distributive law $(a+b)(c+d) = ac + ad + bc + bd$. So we can use this property to improve the fast multiplication algorithm.
-This will let us replace 1 recursive multiplications with 1 new addition and 1 subtraction, as we shall see.
+With the distributive law $(a+b)(c+d) = ac + ad + bc + bd$, we can use this property to improve the fast multiplication algorithm.
+This will let us replace 1 recursive multiplication with 1 new addition and 1 subtraction, as we shall see.
 \begin{tikzpicture}
     \node[draw, color=red] at (0,0) {$w=(a+b)(c+d)$};
     \node at (5,0) {$2\cdot\frac{n}{2}$ additions, 1n multiplication};
@@ -780,11 +780,11 @@ As such, the recursion for this algorithm is $T(n) = 3T\left( \frac{n}{2} \right
 \begin{align*}
     \s{i=0}{\lg n-1} 3^i \left( 4\alpha \frac{n}{2^i} \right) + 3^{\lg n}\mu &= 4\alpha n \sum \frac{3^i}{2^i} &+n^{\lg 3}\mu \\
     &= 4\alpha n \cdot \frac{{\left(\frac{3}{2} \right)}^{\lg n -1 +1}-1}{\frac{3}{2}-1} &\vdots\\
-    &= 4\alpha n \cdot \frac{{\left(\frac{3}{2} \right)}^{\lg n }-1}{\frac{1}{2}} \\
-    &= 8\alpha n \left[ n^{\lg \left( \frac{3}{2} \right)}-1 \right]\\
-    &= 8\alpha n \left[ n^{\lg 3 - \lg 2}-1 \right]\\
-    &= 8\alpha n \left[ \frac{n^{\lg 3}}{n^{\lg 2}}-1 \right]\\
-    &= 8\alpha n \left[ \frac{n^{\lg 3}}{n}-1 \right]\\
+    &= 4\alpha n \cdot \frac{{\left(\frac{3}{2} \right)}^{\lg n }-1}{\frac{1}{2}}  &\vdots\\
+    &= 8\alpha n \left[ n^{\lg \left( \frac{3}{2} \right)}-1 \right]  &\vdots\\
+    &= 8\alpha n \left[ n^{\lg 3 - \lg 2}-1 \right]  &\vdots\\
+    &= 8\alpha n \left[ \frac{n^{\lg 3}}{n^{\lg 2}}-1 \right]  &\vdots\\
+    &= 8\alpha n \left[ \frac{n^{\lg 3}}{n}-1 \right]  &\vdots\\
     &= 8\alpha \left[ {n^{\lg 3}} -n \right] + n^{\lg 3}\mu\\
     &\approx {n^{\lg 3}}\left[ 8\alpha +\mu \right] \\
     &\approx {n^{1.57}}\left[ 8\alpha +\mu \right] \\
@@ -955,9 +955,9 @@ each parent is the parent to 2 heaps, and sift it from the bottom up. Create hea
 create heap on right, then sift root down, and move up a level.
 
 \subsubsection{Heap Creation Analysis}
-In a binary tree, most nodes are near bottom, so doing bottom up technique most
+In a binary tree, most nodes are near bottom, so when doing bottom up technique, most
 work is done near bottom, and because you're near the bottom you don't have far
-to go down.  So we take advantage of that fact: Most elements are near the
+to go down. So we take advantage of that fact: Most elements are near the
 bottom and don't have far to go.
 
 There are $ \frac{n}{2}$ leaves. Each doing 0 comparisons.
@@ -1678,7 +1678,7 @@ will never lose. All other teams must lose at most twice. If you lose to
 someone and they lose to someone else, you're no longer second best. So you
 don't need to incur an extra comparison.  If you keep track of who lost to whom
 you'll conserve comparisons and be bound by the height of the tournament
-bracket, $\lg n-1$ When you run the tournament you incur $n-1$ to find the best
+bracket, $\lg n-1$. When you run the tournament you incur $n-1$ to find the best
 player. Then another $\lg n -1$ to order everyone else, giving $~n+\lg n$
 comparisons.
 
@@ -1686,7 +1686,7 @@ comparisons.
 
 Run tournament to find best, then take all teams who lost both matches $(n/2)$,
 and run again in reverse. There are $\frac{n}{2}-1$ following comparisons to
-find the worst team. $n-1+\frac{n}{2}-1 = n+\frac{n}{2}-2 \approx \frac{3}{2}n$.
+find the worst team. $n-1+\frac{n}{2}-1 = n+\frac{n}{2}-2 = \frac{3}{2}n -2$.
 
 
    % ██████                              ██   ██                     ████████                   ██
@@ -1708,7 +1708,7 @@ $n$ integers in the range $0,\ldots,k-1$. Sort A into B. So simply count the num
         $C[i] \gets 0$\;
     }
     \For{$j=1$ \KwTo$n$}{%
-        $C[A[j]] \gets C[A[i]]+1$\;
+        $C[A[j]] \gets C[A[j]]+1$\;
     }
     $t\gets 0$\;
     \For{$i=0$ \KwTo$k-1$}{%
@@ -1737,7 +1737,7 @@ instead of as simply an integer. So you could do this on comparable objects.
         $C[i] \gets 0$\;
     }
     \For{$j=1$ \KwTo$n$}{%
-        $C[A[j]] \gets C[A[i]]+1$\;
+        $C[A[j]] \gets C[A[j]]+1$\;
     }
     \For{$i=1$ \KwTo$k-1$}{%
         $C[i] \gets C[A[i]]+1$\;
@@ -1754,6 +1754,8 @@ Running time $\Theta(n+k)$.
 Now the C array represents the number of numbers less than the value of the index.
 
 Why do we go through A backwards? To maintain stability.
+
+We can use counting sort when $k <$ nlogn and mergesort when $k >$ nlogn
 
 
  % ███████                  ██ ██            ████████                   ██
@@ -1841,7 +1843,7 @@ Create n buckets.
 
 \begin{algorithm}
     Clear B\;
-    \For{$i=1 \KwTo n $}{%
+    \For{$i=1$ \KwTo $n $}{%
         Put A[i] into bucket $B\left[ \lfloor n\cdot A[i] \rfloor \right]$\;
     }
     Sort each bucket\;
@@ -1857,7 +1859,7 @@ distribution. Simply change the size of the buckets relative to the mean, with
 buckets closer to the mean having a smaller range and ones farther from the
 range on either side being larger.
 
-Also space wise inefficient, but has spacial locality.
+Also space wise inefficient, but has spatial locality.
 
 
   % ████████          ██                   ██   ██
@@ -1876,11 +1878,11 @@ Median $= n+\frac{n}{2}\lg n$
 
 \begin{algorithm}
     \SetKwProg{Fn}{Function}{is}{end}%
-    \SetKwFunction{SEL}{SELETCT}%
+    \SetKwFunction{SEL}{SELECT}%
     \Fn{\SEL{A,k,p,r}}{%
         Find Approximate median for `qth smallest'\;
         Partition based on `qth smallest'\;
-        \If{$k<q-p$}{%
+        \If{$k<q-p+1$}{%
             \SEL{A,k,p,q-1}\;
         }\ElseIf{k>q-p+1}{%
             \SEL{A,k-q-p+1,q+1,r}\;
@@ -1888,8 +1890,7 @@ Median $= n+\frac{n}{2}\lg n$
     }
 \end{algorithm}
 
-Take the list and find some approximate median, then look on the left or right
-side depending on how k compares to our approximate median.
+Take the list and find some approximate median, partition with this approximate median (q), then look on the left or right side depending on how k compares to our partition.
 
 \subsection{Analyzing the recurrence}
 
@@ -1951,12 +1952,12 @@ side, for the pessimistic view. So we get the probabilistic analysis.
     T(n) &= n-1 + \s{q=1}{n}\frac{1}{n}\cdot T(\max(q-1,n-q)) \\
     &= \frac{2}{n}\s{\frac{n}{2}}{n-1}T(q) \\
     &\text{Constructive Induction, guess the algorithm is linear} \\
-    &\text{guess } T(n) \le an \\
+    &\text{Guess } T(n) \le an \\
     &= n-1 + \frac{2}{n}\s{\frac{n}{2}}{n-1}aq \\
     &= n-1 + \frac{2a}{n}\s{\frac{n}{2}}{n-1}q \\
-    &= \frac{2a}{n}\left[ \s{q=1}{n-1} - \s{q=1}{\frac{n}{2}-1} \right] + n-1 \\
+    &= \frac{2a}{n}\left[ \s{q=1}{n-1}q - \s{q=1}{\frac{n}{2}-1}q \right] + n-1 \\
     &= \frac{2a}{n}\left[ \frac{n(n-1)}{2}-\frac{\frac{n}{2}(\frac{n}{2}-1)}{2} \right] + n -1 \\
-    &= \frac{2a}{n}\left[ \frac{n^2}{2}-\frac{n}{2}-\frac{n^2}{8}\frac{n}{4}\right] + n -1 \\
+    &= \frac{2a}{n}\left[ \frac{n^2}{2}-\frac{n}{2}-\frac{n^2}{8}+\frac{n}{4}\right] + n -1 \\
     &= an -a -\frac{an}{4}+\frac{a}{2} +n -1 \\
     &= \frac{3}{4}an - \frac{a}{2} + n -1 \\
     &= (\frac{3}{4}a + 1)n - \frac{a}{2}-1  \;\;\;\text{for induction to work} \le an \therefore a \ge 4 \\
@@ -2054,9 +2055,9 @@ $\begin{array}{cccccccccccccc}
   % ░░░░░░░░  ░░░     ░░░░░░░░ ░░      ░░   ░░   ░░      ░░ ░░░  ░░░░░   ░░░░░░  ░░░    ░░    ░░  ░░   ░░ ░░░  ░░  ░░ ░░░░░░
 \section{Graph Algorithms}
 
-Graph description.
+Graph description. Can be represented as an adjacency list or adjacency matrix.
 
-Undirected graph List representation is a bit awkward because it double counts
+Undirected graph adjacency list representation is a bit awkward because it double counts
 shared edges. Altering an edge on one vertex requires altering the edge on its
 partner too. Requiring that you traverse both lists. One awkward way to
 alleviate this is to keep extra pointers between the list elements in shared
@@ -2106,7 +2107,7 @@ Shrink the array in a way similar to adding a node.
 \begin{algorithm}
     Mark v at visited\;
     for all v such that (u,v) is an edge and v has not been visited \;
-    DFS{v}\;
+    DFS {v}\;
 \end{algorithm}
 
 Adjacency Matrix: $O(n^2)$
@@ -2167,9 +2168,98 @@ Adjacency List: $O(n+m)$
 \subsection{Bridges of K{\"o}ningsberg}
 
 \begin{thrm}[Eulerian Cycle 1736]
-    An undirected, (connected) graph $G=(v,e)$ has an Eulerian Cycle if and only if every vertex is connected and every vertex has even degree.
+    An undirected, (connected) graph $G=(v,e)$ has an Eulerian Cycle if and only if every vertex is connected and every vertex has an even degree (number of incoming and outgoing edges, with loops counted twice).
 \end{thrm}
 
+%
+%
+%Trees
+%
+%
+
+\section{Trees}
+Created by S. Jaladanki
+\subsection{Definitions}
+
+\defn[Tree]{An undirected and connected acyclic graph.}
+
+\begin{itemize}
+    \item If an edge is added between two vertices in a tree, a cycle is created
+    \item If any edge is removed from this cycle, we recreate a tree
+\end{itemize}
+
+Source: \url{https://en.wikipedia.org/wiki/Minimum_spanning_tree}
+
+\defn[Spanning Tree]{A subset of edges that form a tree and contains every vertex in the graph. It does not have cycles.}
+
+\defn[Minimum Spanning Tree (MST)]{A spanning tree that has the lowest possible sum of edge weights}
+
+\begin{itemize}
+   \item  $m = n - 1$ There are m edges in a spanning tree in a graph with n vertices \begin{itemize}
+     \item  For example, a graph with 2 vertices will have a spanning tree consisting of one edge which connects the two vertices
+   \end{itemize}
+ \end{itemize}
+
+\subsection{Minimum Spanning Tree Algorithms}
+
+There are different approaches to form the Minimum Spanning Tree of a graph, and two important algorithms are Kruskal's Algorithm and Prim's Algorithm.
+
+\subsubsection{Kruskal's Algorithm}
+
+In this algorithm, we go through the graph edges one at a time, from smallest edge weight to largest edge weight, and add it to a Minimum Spanning Tree (MST) as long as a cycle is not created. If the edge to add would create a cycle in the MST, it is not added and the next edge is examined. We can stop when we have n-1 edges in the MST. 
+
+\begin{algorithm}
+    Sort edges by weight so that $\lvert e_1\rvert\ \leq \lvert e_2\rvert\ \leq \lvert e_m\rvert\ $\;
+    {\tcp{Assign empty tree}}
+    $T \gets 0$\;
+    {\tcp{m is the edges in a graph}}
+    \For{$i=1$ \KwTo $m $}{%
+        Put edge $i$ into $T$ if cycle is not made\;
+    }
+    \caption{Kruskal's Algorithm}
+\end{algorithm}
+
+\subsubsection{Prim's Algorithm}
+
+In this algorithm, we can start at any vertex and grow the Minimum Spanning Tree (MST). We take the cheapest (smallest) edge coming off the growing tree that leads to a new vertex and add it to the MST. This process is repeated until a MST is made. 
+
+\begin{algorithm}[H]
+    \For{all $x \in V[G]$}{\tcp{Distances to all vertices initialized to $\infty$}
+        $D[x] \gets \infty$\;
+        {\tcp{Predecessors ($\Pi$) to all vertices initialized to NIL}}
+        $\Pi[x] \gets NIL$\;
+    }
+    $Q \gets V[G]$ \tcp{Q will hold the vertices which haven't been checked off yet or "outside" vertices}
+    {\tcp{Distance to start vertex (a) assigned 0 so it is first vertex popped from Q}}
+    $D[a] \gets 0$\;
+    \While{$Q \neq \emptyset$}{
+        $x \gets $Pop-minimum[Q]\;
+        \For{all y adjacent to x in Q}{
+            \If{$y \in Q$ and $W[x,y] < D[y]$}{\tcp{W[x,y] is the weight of edge x,y}
+                {\tcp{Distance and predecessor to new vertex updated}}
+                $D[y] \gets W[x,y]$\;
+                $\Pi[y] \gets x$\;
+            }
+        }
+    \caption{Prim's Algorithm}
+    }
+    
+\end{algorithm}
+\BlankLine
+
+This algorithm is nearly identical to Dijkstra's Algorithm. One important difference between these two is that Prim's adds the vertex closest to the current tree and Dijkstra's adds the vertex closest to the source vertex. 
+\newline
+\newline
+The implementation details are similar to Dijkstra's Algorithm.
+
+\subsubsection{Proof for Kruskal's and Prim's Algorithms}
+
+The proof for Kruskal's and Prim's Algorithms, which are greedy algorithms, is a proof by contradiction. Let's imagine that we have a partially formed MST and that this MST has been made by adding cheapest edges to the tree. On the other side of an imaginary boundary line, there are the remaining vertices which need to be added to the MST. 
+\newline
+\newline
+Statement: The cheapest edge to cross the boundary is in the MST.
+\newline
+Let's say we just added the cheapest edge (1) to cross the boundary to the MST. If this edge (1) were then removed and then replaced with another edge (2) that also crosses the boundary, then we have a contradiction because the new edge (2) is not the cheapest edge to cross the boundary because the old edge (1) was already the cheapest. Therefore, we would no longer have a MST with the new edge (2). 
 
 
  % ███████              ██   ██            ██      ██                         ██   ██   ██
@@ -2184,8 +2274,17 @@ Adjacency List: $O(n+m)$
 \textbf{Types}
 \begin{itemize}
     \item Single source, Single sink.
+        \begin{itemize}
+        \item Ex. What is the best route from site A to site B? 
+        \end{itemize}
     \item All Pairs.
+        \begin{itemize}
+        \item Ex. What is the shortest route between every pair of cities? 
+        \end{itemize}
     \item Single source.
+        \begin{itemize}
+        \item Ex. What is the shortest distance from A to other locations? 
+        \end{itemize}
 \end{itemize}
 
 It's very hard to solve the Single source, single sink problem without also
@@ -2237,15 +2336,17 @@ Create Q as array. Let Q hold 1's for vertices that haven't been eliminated
 yet, and 0's otherwise. Naive approach is to travel Q looking for 1, lookup
 weight in D and track smallest value. If implemented with Adjacency Matrix, the
 whole thing done in $\Theta(n^2)$.
-
+\newline
+\newline
 The alternative is to use a priority queue / heap for Q, removing the smallest
 value. This necessitates some extra heap functions to grab an arbitrary node in
-the heap and change its weight. That let's you pop from the heap in logarithmic
+the heap and change its weight. That lets you pop from the heap in logarithmic
 time. There's an additional requirement to visit $|adj(x)|$ additional vertices,
 and update them with our heap manipulation function to update weight, which is
-an additional $\Theta(\lg n)$ Since Dijkstra does this for every element the
+an additional $\Theta(\lg n)$. Since Dijkstra's does this for every element the
 running time is $\Theta(m\cdot\lg n)$.
-
+\newline
+\newline
 So if your graph is dense it's better to use the Adjacency Matrix algorithm,
 which is quadratic in the number of vertices. If your graph is sparse it's
 better to use the $m\log n$ algorithm with a priority queue.
@@ -2313,6 +2414,14 @@ If it is then it can be evaluated in polynomial time, the certificate is the
 assignment. If it isn't satisfiable the only way to show that is to try every
 possibility of assignments, which takes exponential time.
 
+\begin{thrm}[Cook-Levin 1972]
+    Satisfiability is NP-Complete.
+\end{thrm}
+
+\begin{itemize}
+    \item The Cook-Levin Theorem implies that if we can solve a satisfiability problem in polynomial time, we can solve any problem in the class NP in polynomial time when the answer is "yes". 
+\end{itemize}
+    
 \subsection{The Class of NP problems}
 
 Is it the case that if something can be solved in polynomial time it can be verified in polynomial time?
@@ -2361,7 +2470,7 @@ than some target length.
 This is a generalization of the Hamiltonian Cycle problem, which is NP
 complete, therefore the traveling salesman problem is NP complete.
 
-\subsubsection{theory}
+\subsubsection{Theory}
 There were generalizable characteristics of the Eulerian cycle problem that
 allowed Mathematicians to determine proofs around them, but the Hamiltonian
 Cycle problem doesn't have any generalizable characteristics like that and it
@@ -2399,13 +2508,13 @@ Given Formula A variables $x_1, x_2, \ldots , x_n$
 \begin{algorithm}
     \SetKwFunction{SATDEC}{SAT-decidability}%
     \If{not \SATDEC{A}}{\Return{False}}
-    \For{$i=1 \KwTo n$}{%
+    \For{$i=1$ \KwTo $n$}{%
         $B \gets A$\;
-        Assign True to $x_i$in A \tcp{Every time you see xi in the formula substitute with true}
+        Assign True to $x_i$ in A \tcp{Every time you see $x_i$ in the formula substitute with true}
             Simplify to remove True\;
         \If{not \SATDEC{A}}{%
             $A \gets B$\;
-            Assign False to xi and simplify\;
+            Assign False to $x_i$ and simplify\;
         }
     }
     \Return{X}\;
@@ -2441,6 +2550,68 @@ what's the smallest number k such that a graph is k-colorable.
     color determiner to require a color at that vertex.
 
     Size of $G^{\prime} = |G|+ c^2 +(c-1)n$
+
+\newpage
+
+\section{Appendices}
+
+Created by S. Jaladanki
+
+Here, additional information is given about concepts described in the above text.
+
+\subsection{A. Transpositions}
+
+A transposition involves a pair of numbers where the bigger number is above the smaller number. 
+\newline
+\newline
+For example, let's look at an example array with the values at indices 1 to 5 listed from top to bottom. We're trying to sort this list to have lower numbers on top (or the left) and larger numbers on the bottom (the right).
+\newline
+\begin{align*}
+    3 \\
+    5 \\
+    2 \\
+    1 \\
+    4
+\end{align*}
+
+In the above array, there are 2 transpositions involving 3, since both 1 and 2 are smaller than 3 but located farther to the bottom (or the right) than 3. There are 3 transpositions involving 5 since 2, 1, and 4 are smaller than 5 but located closer to the bottom of the array. Similarly, there is 1 transposition involving 2 (because of 1), 0 transpositions involving 1, and 0 transpositions involving 4. From the above array, there is a total of 6 transpositions. 
+\newline
+\newline
+The number of transpositions is equal to the number of exchanges in bubble sort. For instance, in an already sorted list, there would be 0 exchanges needed since there are 0 transpositions. 
+
+\subsection{B. Summation Properties}
+
+Manipulating summations is an important part of the course, and examples of important properties of summations are provided.
+
+\begin{align*}
+    %\sum_{k=i}^{j}1  = j-i+1 & \text{Top index - bottom index + 1} \\
+    &\sum_{k=i}^{j}1 = j-i+1 & \text{Upper limit - lower limit + 1} \\
+    &\sum_{i=1}^{n}i= \frac{n(n+1)}{2} & \text{Gauss' sum formula, notice that lower limit is 1} \\
+    &\sum_{i=2}^{n}(i-1) 
+    =\sum_{i=1}^{n-1}(i-1)+1 = \sum_{i=1}^{n-1}i & \text{Subtract 1 from both limits and add 1 to formula}\\
+    &\sum_{i=2}^{n}i 
+    = (\sum_{i=1}^{n}i)-1 & \text{Since added 1 to summation, subtract 1 outside of it}\\
+    &\sum_{i=1}^{n-1} 2
+    = 2\sum_{i=1}^{n-1}1 & \text{Can pull out coefficients if not related to index (which is i here)}\\
+    &\frac{1}{2}\sum_{i=1}^{n}(i^2+i) 
+    =\frac{1}{2}\sum_{i=1}^{n}i^2 + \frac{1}{2}\sum_{i=1}^{n}i & \text{Can treat each term in parantheses as separate summation}\\
+    &\sum_{i=2}^{n} \sum_{j=1}^{i}\frac{1}{i}(i-j+1) 
+    =\sum_{i=2}^{n}\frac{1}{i}\sum_{j=1}^{i}(i-j+1) & \text{Can pull out $\frac{1}{i}$ from inner summation because j is index}\\
+    &\sum_{i=0}^{lgn-1}2^i  
+    =\frac{1-2^{(lgn-1)+1}}{1-2} = \frac{1-2^{lgn}}{-1} = -1 + n^{lg2} = n-1 & \text{Use of geometric series formula}\\
+\end{align*}
+
+
+Following is an example of the Change of Variable Method.
+
+\begin{align*}
+    &\sum_{i=1}^{n}(n-i+1) \\
+    & \text{Writing out summation terms with substitution gives}\\
+    &=\underbrace{(n-1+1)}_{n} + \underbrace{(n-2+1)}_{n-1} + \underbrace{(n-3+1)}_{n-2} + ... + 
+    \underbrace{(n-(n-2)+1)}_{3} + \underbrace{(n-(n-1)+1)}_{2} + \underbrace{(n-n+1)}_{1} \\
+    & \text{Based on the pattern and range of the terms (1,2,3...n-2,n-1,n) we can rewrite the summation as}\\
+    &=\sum_{i=1}^{n}(i) = \frac{n(n+1)}{2} \\
+\end{align*}
 
 
  % ████████ ████     ██ ███████
